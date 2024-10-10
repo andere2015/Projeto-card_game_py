@@ -1,8 +1,10 @@
 class Card:
-    def __init__(self, name, attack, life, effect, tipo, asset):
-        self.name = name
-        self.attack = attack
-        self.life = life
-        self.effect = effect
-        self.tipo = tipo 
-        self.asset = asset
+    def init(self, id , nome, vida, ataque, img, descricao,tipo,area):
+        self.id = id
+        self.nome = nome 
+        self.vida = vida
+        self.ataque = ataque
+        self.img = img
+        self.descricao = descricao
+        self.tipo = tipo
+        self.area = area

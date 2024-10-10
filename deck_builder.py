@@ -15,7 +15,7 @@ def draw_card_options(screen, cards, selected_cards):
     for i, card in enumerate(cards):
         x = 50 + (i % 5) * 120
         y = 150 + (i // 5) * 200
-        card_image = pygame.image.load(card.asset)
+        card_image = pygame.image.load(card.img)
         card_image = pygame.transform.scale(card_image, (100, 150))
         screen.blit(card_image, (x, y))
 
@@ -32,7 +32,7 @@ def deck_builder(screen, player):
     selected_cards = {}
     available_cards = cartas_existentes
 
-    while sum(selected_cards.values()) < 20:
+    while sum(selected_cards.values()) < 5:
         screen.fill(WHITE)
         draw_text(f'{player.name}, escolha suas cartas ({sum(selected_cards.values())}/20)', font, BLACK, screen, 364, 50)
         draw_card_options(screen, available_cards, selected_cards)
