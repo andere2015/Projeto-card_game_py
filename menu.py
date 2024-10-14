@@ -12,20 +12,17 @@ def show_menu(screen):
     screen.fill(WHITE)
     draw_text('Cartas Massa', font, BLACK, screen, 364, 100)
 
-    field_image = pygame.image.load('assets/banner.png')
-    field_image = pygame.transform.scale(field_image, (1427/2, 425/2))
+    field_image = pygame.image.load('assets/banner.svg')
+    field_image = pygame.transform.scale(field_image, (1000, 800))
     screen.blit(field_image, (0, 0))
-
-    draw_text('Iniciar Jogo', font, BLACK, screen, 364, 225)
-    draw_text('Sair', font, BLACK, screen, 364, 325)
     
     mx, my = pygame.mouse.get_pos()
     
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if 264 <= mx <= 464 and 200 <= my <= 250:
+            if 315 <= mx <= 435 and 270 <= my <= 310:
                 return False, True 
-            if 264 <= mx <= 464 and 300 <= my <= 350:
+            if 328 <= mx <= 423 and 337 <= my <= 377:
                 pygame.quit()
                 sys.exit()
     

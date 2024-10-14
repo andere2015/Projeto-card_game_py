@@ -4,7 +4,7 @@ from menu import show_menu
 from game import start_game
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((730, 625))
+    screen = pygame.display.set_mode((1000, 800))
     pygame.display.set_caption("Cartas Massa")
 
     menu = True

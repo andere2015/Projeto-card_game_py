@@ -46,7 +46,7 @@ def move_back_to_front(grid, player_name):
 
 def start_game(screen):
     field_image = pygame.image.load('assets/tabuleiro.svg')
-    field_image = pygame.transform.scale(field_image, (729, 625))
+    field_image = pygame.transform.scale(field_image, (1000, 800))
 
     player1 = Player("player 1")
     player2 = Player("player 2")
@@ -63,21 +63,21 @@ def start_game(screen):
 
     # Definindo o grid com estados de ocupação e contadores de turnos
     grid = {
-        'player_1_back_row': [{'pos': (269, 417, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (353, 417, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (438, 417, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0}],
+        'player_1_back_row': [{'pos': (347, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': (468, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': (593, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
         
-        'player_1_front_row': [{'pos': (269, 330, 50, 75), 'occupied': False, 'card': None},
-                               {'pos': (353, 330, 50, 75), 'occupied': False, 'card': None},
-                               {'pos': (438, 330, 50, 75), 'occupied': False, 'card': None}],
+        'player_1_front_row': [{'pos': (347, 376, 80, 114), 'occupied': False, 'card': None},
+                               {'pos': (471, 376, 80, 114), 'occupied': False, 'card': None},
+                               {'pos': (593, 376, 80, 114), 'occupied': False, 'card': None}],
         
-        'player_2_front_row': [{'pos': (268, 202, 50, 75), 'occupied': False, 'card': None},
-                               {'pos': (353, 202, 50, 75), 'occupied': False, 'card': None},
-                               {'pos': (439, 202, 50, 75), 'occupied': False, 'card': None}],
+        'player_2_front_row':  [{'pos': (347, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': (470, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': (593, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
         
-        'player_2_back_row': [{'pos': (266, 115, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (351, 115, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (436, 115, 50, 75), 'occupied': False, 'card': None, 'turn_counter': 0}],
+        'player_2_back_row': [{'pos': (347, 60, 80, 114), 'occupied': False, 'card': None},
+                               {'pos': (470, 60, 80, 114), 'occupied': False, 'card': None},
+                               {'pos': (593, 60, 80, 114), 'occupied': False, 'card': None}],
     }
 
     while True:
@@ -94,7 +94,7 @@ def start_game(screen):
 
         # Renderiza as cartas na mão do jogador atual
         for i, card in enumerate(current_player.hand):
-            x, y, width, height =197 + i * 78, 520, 50, 75
+            x, y, width, height = 230 + i * 95, 656, 81, 117
             card_image = pygame.image.load(card.img)
             card_image = pygame.transform.scale(card_image, (width, height))
             screen.blit(card_image, (x, y))
@@ -111,7 +111,7 @@ def start_game(screen):
             if event.type == pygame.MOUSEBUTTONDOWN and not dragging:
                 mx, my = pygame.mouse.get_pos()
                 for i, card in enumerate(current_player.hand):
-                    x, y, width, height =197 + i * 78, 520, 50, 75
+                    x, y, width, height = 230 + i * 95, 656, 81, 117
                     if x <= mx <= x + width and y <= my <= y + height:
                         selected_card = card
                         dragging = True
