@@ -45,7 +45,7 @@ def move_back_to_front(grid, player_name):
                 back_card['card'] = None
 
 def start_game(screen):
-    field_image = pygame.image.load('image.png')
+    field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (729, 625))
 
     player1 = Player("player 1")
@@ -94,13 +94,13 @@ def start_game(screen):
 
         # Renderiza as cartas na mão do jogador atual
         for i, card in enumerate(current_player.hand):
-            x, y, width, height = 50 + i * 100, 550, 50, 75
+            x, y, width, height =197 + i * 78, 520, 50, 75
             card_image = pygame.image.load(card.img)
             card_image = pygame.transform.scale(card_image, (width, height))
             screen.blit(card_image, (x, y))
 
         # Botão de passar turno
-        pass_button = draw_button(screen, 'Passar Turno', 300, 300, 150, 50, BLACK, GREEN)
+        pass_button = draw_button(screen, 'Passar vez', 10, 300, 120, 50, (0,0,255), GREEN)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -111,7 +111,7 @@ def start_game(screen):
             if event.type == pygame.MOUSEBUTTONDOWN and not dragging:
                 mx, my = pygame.mouse.get_pos()
                 for i, card in enumerate(current_player.hand):
-                    x, y, width, height = 50 + i * 100, 550, 50, 75
+                    x, y, width, height =197 + i * 78, 520, 50, 75
                     if x <= mx <= x + width and y <= my <= y + height:
                         selected_card = card
                         dragging = True

@@ -11,6 +11,11 @@ def show_menu(screen):
     font = pygame.font.SysFont(None, 40)
     screen.fill(WHITE)
     draw_text('Cartas Massa', font, BLACK, screen, 364, 100)
+
+    field_image = pygame.image.load('assets/banner.png')
+    field_image = pygame.transform.scale(field_image, (1427/2, 425/2))
+    screen.blit(field_image, (0, 0))
+
     draw_text('Iniciar Jogo', font, BLACK, screen, 364, 225)
     draw_text('Sair', font, BLACK, screen, 364, 325)
     
