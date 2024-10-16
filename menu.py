@@ -20,9 +20,9 @@ def show_menu(screen):
     
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if 315 <= mx <= 435 and 270 <= my <= 310:
+            if 440 <= mx <= 567 and 331 <= my <= 369:
                 return False, True 
-            if 328 <= mx <= 423 and 337 <= my <= 377:
+            if 453 <= mx <= 548 and 395 <= my <= 433:
                 pygame.quit()
                 sys.exit()
     
