@@ -5,6 +5,7 @@ import random
 from constants import WHITE, GREEN, BLACK
 from player import Player
 from deck_builder import deck_builder
+import sons
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
@@ -45,6 +46,7 @@ def move_back_to_front(grid, player_name):
                 back_card['card'] = None
 
 def start_game(screen):
+   
     field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (1000, 800))
 
@@ -83,7 +85,6 @@ def start_game(screen):
     while True:
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
-
         # Renderiza as cartas no campo
         for row_key in grid:
             for position in grid[row_key]:
