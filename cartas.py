@@ -17,200 +17,200 @@ def Habilidade():
 
 class And(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(1,'And', vida, ataque, 'assets/Group 3.svg', descricao, 'tropa','circuitos')
+        super().__init__(1,'And', vida, ataque, 'assets/and.svg', descricao, 'tropa','circuitos')
 
 class Arp(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(2,'Arp', vida, ataque, 'assets/Group 23.svg', descricao, 'feitiço','redes')
+        super().__init__(2,'Arp', vida, ataque, 'assets/arp.svg', descricao, 'feitiço','redes')
 
 class ArvoreB(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(3,'Arvore B', vida, ataque, 'assets/Group 16.svg', descricao, 'tropa','algoritmos')
+        super().__init__(3,'Arvore B', vida, ataque, 'assets/arvoreb.svg', descricao, 'tropa','algoritmos')
 
 class ArvoreRB(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(4,'Árvore RB', vida, ataque, 'assets/Group 30.svg', descricao, 'tropa','algoritmos')
+        super().__init__(4,'Árvore RB', vida, ataque, 'assets/rubro.svg', descricao, 'tropa','algoritmos')
 
 class Bombe(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(5,'Bombe', vida, ataque, 'assets/Group 38.svg', descricao, 'tropa','programação')
+        super().__init__(5,'Bombe', vida, ataque, 'assets/bombe.svg', descricao, 'tropa','programação')
 
 class Break(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(6,'Break', vida, ataque, 'assets/Group 40.svg', descricao, 'feitiço','programação')
+        super().__init__(6,'Break', vida, ataque, 'assets/break.svg', descricao, 'feitiço','programação')
 
 class Bug(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(7,'Bug', vida, ataque, 'assets/Group 39.svg', descricao, 'tropa','programação')
+        super().__init__(7,'Bug', vida, ataque, 'assets/bug.svg', descricao, 'tropa','programação')
 
 class Capacitor(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(8,'Capacitor', vida, ataque, 'assets/Group 13.svg', descricao, 'equipamento','circuitos')
+        super().__init__(8,'Capacitor', vida, ataque, 'assets/capacitor.svg', descricao, 'equipamento','circuitos')
 
 class Clockpulse(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(9,'Clock Pulse', vida, ataque, 'assets/Group 12.svg', descricao, 'equipamento','circuitos')
+        super().__init__(9,'Clock Pulse', vida, ataque, 'assets/clock.svg', descricao, 'equipamento','circuitos')
 
 class Constante(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(10,'Constante', vida, ataque, 'assets/Frame 2.svg', descricao, 'tropa','programação')
+        super().__init__(10,'Constante', vida, ataque, 'assets/constant.svg', descricao, 'tropa','programação')
 
 class Continue(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(11,'Continue', vida, ataque, 'assets/Group 41.svg', descricao, 'feitiço','programação')
+        super().__init__(11,'Continue', vida, ataque, 'assets/continue.svg', descricao, 'feitiço','programação')
 
 class DdosAttack(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(12,'DDoS Attack', vida, ataque, 'assets/Group 25.svg', descricao, 'feitiço','Redes')
+        super().__init__(12,'DDoS Attack', vida, ataque, 'assets/ddos.svg', descricao, 'feitiço','Redes')
 
 class Derivada(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(13,'Derivada', vida, ataque, 'assets/Group 32.svg', descricao, 'feitiço','cálculo')
+        super().__init__(13,'Derivada', vida, ataque, 'assets/derivada.svg', descricao, 'feitiço','cálculo')
 
 class Dijkstra(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(14,'Dijkstra', vida, ataque, 'assets/Group 29.svg', descricao, 'tropa','cálculo')
+        super().__init__(14,'Dijkstra', vida, ataque, 'assets/dijkstra.svg', descricao, 'tropa','cálculo')
 
 class DoWhile(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(15,'Do While', vida, ataque, 'assets/Group 26.svg', descricao, 'tropa','programação')
+        super().__init__(15,'Do While', vida, ataque, 'assets/dowhile.svg', descricao, 'tropa','programação')
 
 class EspacoVetorial(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(16,'Espaco Vetorial', vida, ataque, 'assets/Group 47.svg', descricao, 'feitiço','cálculo')
+        super().__init__(16,'Espaco Vetorial', vida, ataque, 'assets/vetorial.svg', descricao, 'feitiço','cálculo')
 
 class Fila(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(17,'Fila', vida, ataque, 'assets/Group 5.svg', descricao, 'feitiço', 'programação')
+        super().__init__(17,'Fila', vida, ataque, 'assets/fila.svg', descricao, 'feitiço', 'programação')
 
 class Firewall(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(18,'Fire Wall', vida, ataque, 'assets/Group 21.svg', descricao, 'tropa', 'redes')
+        super().__init__(18,'Fire Wall', vida, ataque, 'assets/firewall.svg', descricao, 'tropa', 'redes')
 
 class FlipFlop(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(19,'FlipFlop', vida, ataque, 'assets/Group 7.svg', descricao, 'tropa', 'circuitos')
+        super().__init__(19,'FlipFlop', vida, ataque, 'assets/flipflop.svg', descricao, 'tropa', 'circuitos')
 
 class Getway(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(20,'Getway', vida, ataque, 'assets/Group 15.svg', descricao, 'feitiço', 'redes')
+        super().__init__(20,'Getway', vida, ataque, 'assets/getway.svg', descricao, 'feitiço', 'redes')
 
 class GrafoPonderado(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(21,'Grafo Ponderado', vida, ataque, 'assets/Group 27.svg', descricao, 'feitiço', 'algoritmos')
+        super().__init__(21,'Grafo Ponderado', vida, ataque, 'assets/ponderar.svg', descricao, 'feitiço', 'algoritmos')
 
 class GrafoFonte(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(22,'Grafo fonte', vida, ataque, 'assets/Group 24.svg', descricao, 'tropa', 'algoritmos')
+        super().__init__(22,'Grafo fonte', vida, ataque, 'assets/fonte.svg', descricao, 'tropa', 'algoritmos')
 
 class GrafoSumidouro(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(23,'Grafo Sumidouro', vida, ataque, 'assets/Group 17.svg', descricao, 'tropa', 'algoritmos')
+        super().__init__(23,'Grafo Sumidouro', vida, ataque, 'assets/sumidouro.svg', descricao, 'tropa', 'algoritmos')
 
 class HeapMaximo(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(24,'Heap Max', vida, ataque, 'assets/Group 28.svg', descricao, 'feitiço', 'algoritmos')
+        super().__init__(24,'Heap Max', vida, ataque, 'assets/heapmax.svg', descricao, 'feitiço', 'algoritmos')
 
 class Hub(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(25,'Hub', vida, ataque, 'assets/Group 19.svg', descricao, 'tropa', 'redes')
+        super().__init__(25,'Hub', vida, ataque, 'assets/hub.svg', descricao, 'tropa', 'redes')
 
 class IntegracaoPartes(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(26,'Integracao por Partes', vida, ataque, 'assets/Group 46.svg', descricao, 'equipamento', 'cálculo')
+        super().__init__(26,'Integracao por Partes', vida, ataque, 'assets/intpartes.svg', descricao, 'equipamento', 'cálculo')
 
 
 class Integral(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(27,'Integral', vida, ataque, 'assets/Group 31.svg', descricao, 'equipamento', 'cálculo')
+        super().__init__(27,'Integral', vida, ataque, 'assets/integral.svg', descricao, 'equipamento', 'cálculo')
 
 class Karnaugh(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(82,'Karnaugh', vida, ataque, 'assets/Group 6.svg', descricao, 'tropa', 'circuitos')
+        super().__init__(82,'Karnaugh', vida, ataque, 'assets/karnaugh.svg', descricao, 'tropa', 'circuitos')
 
 class Multiplexador(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(29,'Multiplexador', vida, ataque, 'assets/Group 4.svg', descricao, 'feitiço', 'circuitos')
+        super().__init__(29,'Multiplexador', vida, ataque, 'assets/multplex.svg', descricao, 'feitiço', 'circuitos')
 
 class Nabla(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(30,'Nabla', vida, ataque, 'assets/Group 45.svg', descricao, 'tropa', 'cálculo')
+        super().__init__(30,'Nabla', vida, ataque, 'assets/nabla.svg', descricao, 'tropa', 'cálculo')
 
 class Not(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(31,'Not', vida, ataque, 'assets/Group 49.svg', descricao, 'equipamento', 'circuitos')
+        super().__init__(31,'Not', vida, ataque, 'assets/not.svg', descricao, 'equipamento', 'circuitos')
 
 class Or(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(32,'Or', vida, ataque, 'assets/Group 8.svg', descricao, 'tropa', 'circuitos')
+        super().__init__(32,'Or', vida, ataque, 'assets/or.svg', descricao, 'tropa', 'circuitos')
 
 class Pilha(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(33,'Pilha', vida, ataque, 'assets/Group 18.svg', descricao, 'feitiço', 'programação')
+        super().__init__(33,'Pilha', vida, ataque, 'assets/pilha.svg', descricao, 'feitiço', 'programação')
 
 class Ponteiro(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(34,'Ponteiro', vida, ataque, 'assets/Group 37.svg', descricao, 'tropa', 'programação')
+        super().__init__(34,'Ponteiro', vida, ataque, 'assets/ponteiro.svg', descricao, 'tropa', 'programação')
 
 class Registrador(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(35,'Registrador', vida, ataque, 'assets/Group 11.svg', descricao, 'tropa', 'circuitos')
+        super().__init__(35,'Registrador', vida, ataque, 'assets/register.svg', descricao, 'tropa', 'circuitos')
 
 class RegraCadeia(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(36,'Regra da cadeia', vida, ataque, 'assets/Group 34.svg', descricao, 'tropa', 'cálculo')
+        super().__init__(36,'Regra da cadeia', vida, ataque, 'assets/cadeia.svg', descricao, 'tropa', 'cálculo')
 
 class Repetidor(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(37,'Repetidor', vida, ataque, 'assets/Group 44.svg', descricao, 'tropa', 'redes')
+        super().__init__(37,'Repetidor', vida, ataque, 'assets/repetidor.svg', descricao, 'tropa', 'redes')
 
 class Return(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(38,'Return', vida, ataque, 'assets/Group 9.svg', descricao, 'feitiço', 'programação')
+        super().__init__(38,'Return', vida, ataque, 'assets/return.svg', descricao, 'feitiço', 'programação')
 
 class Riemann(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(39,'Riemann', vida, ataque, 'assets/Group 48.svg', descricao, 'tropa', 'cálculo')
+        super().__init__(39,'Riemann', vida, ataque, 'assets/riemann.svg', descricao, 'tropa', 'cálculo')
 
 class Roteador(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(40,'Roteador', vida, ataque, 'assets/Group 14.svg', descricao, 'tropa', 'redes')
+        super().__init__(40,'Roteador', vida, ataque, 'assets/roteador.svg', descricao, 'tropa', 'redes')
 
 class Sniffer(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(41,'Sniffet', vida, ataque, 'assets/Group 22.svg', descricao, 'tropa', 'redes')
+        super().__init__(41,'Sniffet', vida, ataque, 'assets/sniffer.svg', descricao, 'tropa', 'redes')
 
 class Somatorio(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(42,'Somatório', vida, ataque, 'assets/Group 43.svg', descricao, 'feitiço', 'cálculo')
+        super().__init__(42,'Somatório', vida, ataque, 'assets/shomatorio.svg', descricao, 'feitiço', 'cálculo')
 
 class Struct(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(43,'Struct', vida, ataque, 'assets/Group 36.svg', descricao, 'tropa', 'programação')
+        super().__init__(43,'Struct', vida, ataque, 'assets/struct.svg', descricao, 'tropa', 'programação')
 
 class SubstituicaoTrigonometrica(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(44,'Subs Trigonométrica', vida, ataque, 'assets/Group 33.svg', descricao, 'tropa', 'cálculo')
+        super().__init__(44,'Subs Trigonométrica', vida, ataque, 'assets/subtrig.svg', descricao, 'tropa', 'cálculo')
 
 class Switch(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(45,'Switch', vida, ataque, 'assets/Group 20.svg', descricao, 'tropa', 'redes')
+        super().__init__(45,'Switch', vida, ataque, 'assets/switch.svg', descricao, 'tropa', 'redes')
 
 class Ttl(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(46,'TTL', vida, ataque, 'assets/Group 10.svg', descricao, 'feitiço', 'redes')
+        super().__init__(46,'TTL', vida, ataque, 'assets/ttl.svg', descricao, 'feitiço', 'redes')
 
 class Xor(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(47,'Xor', vida, ataque, 'assets/Group 2.svg', descricao, 'tropa', 'Circuitos')
+        super().__init__(47,'Xor', vida, ataque, 'assets/xor.svg', descricao, 'tropa', 'Circuitos')
 
 class TeoremaConfronto(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(48,'Teorema do confronto', vida, ataque, 'assets/Group 35.svg', descricao, 'feitiço', 'cálculo')
+        super().__init__(48,'Teorema do confronto', vida, ataque, 'assets/confronto.svg', descricao, 'feitiço', 'cálculo')
 
 class SwitchCode(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(48,'Código Switch', vida, ataque, 'assets/Group 42.svg', descricao, 'equipamento', 'programação')
+        super().__init__(48,'Código Switch', vida, ataque, 'assets/switchC.svg', descricao, 'equipamento', 'programação')
 
 
 and_carta = And(10, 5, "A porta lógica AND")
