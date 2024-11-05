@@ -12,6 +12,7 @@ def draw_text(text, font, color, surface, x, y):
     textrect = textobj.get_rect(center=(x, y))
     surface.blit(textobj, textrect)
 
+
 def draw_button(surface, text, x, y, width, height, color, hover_color):
     mouse_pos = pygame.mouse.get_pos()
     button_rect = pygame.Rect(x, y, width, height)
@@ -45,23 +46,51 @@ def move_back_to_front(grid, player_name):
                 back_card['occupied'] = False  # Limpa a posição da back_row
                 back_card['card'] = None
 
+def show_turn_message(screen, player_name):
+    font = pygame.font.SysFont(None, 50)
+    text = f"É a vez de {player_name} escolher!"
+    text_surf = font.render(text, True, BLACK)
+    text_rect = text_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+
+    # Desenha um retângulo branco cobrindo toda a tela
+    screen.fill(WHITE)
+    screen.blit(text_surf, text_rect)
+    pygame.display.flip()  # Atualiza a tela
+
+    # Espera 2 segundos
+    pygame.time.wait(2000)
+
 def start_game(screen):
-   
     field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (1000, 800))
 
     player1 = Player("player 1")
     player2 = Player("player 2")
-
+    
     player1.deck = deck_builder(screen, player1)
+
+    # Chama a função para mostrar a mensagem de turno antes do jogador 2
+    show_turn_message(screen, player2.name)
+
     player2.deck = deck_builder(screen, player2)
-    player1.hand = random.sample(player1.deck, 5)
-    player2.hand = random.sample(player2.deck, 5)
+
+
+    random.shuffle(player1.deck)
+    random.shuffle(player2.deck)
+
+    for i in range(0,5):
+        player1.hand.append(player1.deck.pop(0))
+
+    for i in range(0,5):
+        player2.hand.append(player2.deck.pop(0))
 
     current_player = player1
     selected_card = None
     dragging = False
     turn_counter = 0  # Contador de turnos
+    ctrlPass=0
+    # Restante do código continua como está...
+
 
     # Definindo o grid com estados de ocupação e contadores de turnos
     grid = {
@@ -74,10 +103,10 @@ def start_game(screen):
                                {'pos': (593, 376, 80, 114), 'occupied': False, 'card': None}],
         
         'player_2_front_row':  [{'pos': (347, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (470, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (593, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
+                                {'pos': (470, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
+                                {'pos': (593, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
         
-        'player_2_back_row': [{'pos': (347, 60, 80, 114), 'occupied': False, 'card': None},
+        'player_2_back_row': [ {'pos': (347, 60, 80, 114), 'occupied': False, 'card': None},
                                {'pos': (470, 60, 80, 114), 'occupied': False, 'card': None},
                                {'pos': (593, 60, 80, 114), 'occupied': False, 'card': None}],
     }
@@ -85,9 +114,10 @@ def start_game(screen):
     while True:
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
+        
         # Renderiza as cartas no campo
         for row_key in grid:
-            for position in grid[row_key]:
+            for position in grid[row_key]:  
                 if position['occupied']:
                     card_image = pygame.image.load(position['card'].img)
                     card_image = pygame.transform.scale(card_image, (position['pos'][2], position['pos'][3]))
@@ -129,6 +159,7 @@ def start_game(screen):
                             position['occupied'] = True
                             position['card'] = selected_card
                             position['turn_counter'] = 0  # Reseta o contador de turnos ao colocar a carta
+                            
                             break
                 dragging = False
                 selected_card = None
@@ -137,6 +168,13 @@ def start_game(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if pass_button.collidepoint(pygame.mouse.get_pos()):
                     turn_counter += 1  # Incrementa o contador de turnos
+                    ctrlPass+=1
+
+                    if(len(player1.hand)<6 and len(player1.deck) > 0 and ctrlPass%2 == 0):
+                        player1.hand.append(player1.deck.pop(0))
+                    if(len(player2.hand)<6 and len(player2.deck) > 0 and ctrlPass%2 != 0 and ctrlPass !=1):
+                        player2.hand.append(player2.deck.pop(0))
+
                     if turn_counter == 1:  # Quando o jogador clicou uma vez
                         # Move cartas do back row do jogador adversário para a frente, se houver
                         if current_player == player1:

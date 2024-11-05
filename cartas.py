@@ -213,7 +213,7 @@ class SwitchCode(Card):
         super().__init__(48,'Código Switch', vida, ataque, 'assets/switchC.svg', descricao, 'equipamento', 'programação')
 
 
-and_carta = And(10, 5, "A porta lógica AND")
+and_carta = And(10, 5, "A porta lógica AND é muito forte e tal tal tal")
 arp_carta = Arp(8, 4, "Ataque de ARP spoofing")
 arvore_b_carta = ArvoreB(12, 7, "Árvore B para organização de dados")
 arvore_rb_carta = ArvoreRB(14, 9, "Árvore Vermelho-Preto equilibrada")
