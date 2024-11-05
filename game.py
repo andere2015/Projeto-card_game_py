@@ -149,7 +149,7 @@ def start_game(screen):
                         break
 
             # Soltando a carta no campo (somente na back row)
-            if event.type == pygame.MOUSEBUTTONUP and dragging:
+            if event.type == pygame.MOUSEBUTTONUP and dragging:  
                 mx, my = pygame.mouse.get_pos()
                 for row_key in [f'{current_player.name.lower().replace(" ", "_")}_back_row']:
                     for position in grid[row_key]:
@@ -160,13 +160,16 @@ def start_game(screen):
                             position['card'] = selected_card
                             position['turn_counter'] = 0  # Reseta o contador de turnos ao colocar a carta
                             
+                            sons.tocar_musica_carta()
                             break
                 dragging = False
                 selected_card = None
 
             # Clique no botão "Passar Turno"
             if event.type == pygame.MOUSEBUTTONDOWN:
+                
                 if pass_button.collidepoint(pygame.mouse.get_pos()):
+                    sons.tocar_musica_turno()
                     turn_counter += 1  # Incrementa o contador de turnos
                     ctrlPass+=1
 
