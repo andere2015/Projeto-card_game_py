@@ -28,13 +28,16 @@ def tocar_musica_jogo():
 
 # Função para som de mover carta
 def tocar_musica_carta():
-    pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
-    pygame.mixer.music.set_volume(0.9)
-    pygame.mixer.music.play()
+    carta = pygame.mixer.Sound('assets/carta.mp3')  # Carrega a música do jogo
+    carta.set_volume(0.9)
+    carta.play() 
+
+
 def tocar_musica_turno():
-    pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
-    pygame.mixer.music.set_volume(0.9)
-    pygame.mixer.music.play()  # Toca indefinidamente
+    turno = pygame.mixer.Sound('assets/carta.mp3')  # Carrega a música do jogo
+    turno.set_volume(0.9)
+    turno.play() 
+
 
 def tocar_musica_vitoria():
     pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo

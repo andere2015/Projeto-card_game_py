@@ -6,7 +6,7 @@ from constants import WHITE, GREEN, BLACK
 from player import Player
 from deck_builder import deck_builder
 import sons
-
+import time
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect(center=(x, y))
@@ -38,12 +38,12 @@ def move_back_to_front(grid, player_name):
     front_row = grid[front_row_key]
     
     for i, back_card in enumerate(back_row):
-        if back_card['occupied']:  # Verifica se a posição na back_row está ocupada
-            front_card = front_row[i]  # Posição correspondente no front_row
-            if not front_card['occupied']:  # Verifica se a posição correspondente no front_row está livre
+        if back_card is not None and back_card['occupied'] and back_card['card'].tipo != "equipamento" : 
+            front_card = front_row[i]  
+            if not front_card['occupied']: 
                 front_card['occupied'] = True
-                front_card['card'] = back_card['card']  # Move a carta para o front_row
-                back_card['occupied'] = False  # Limpa a posição da back_row
+                front_card['card'] = back_card['card'] 
+                back_card['occupied'] = False  
                 back_card['card'] = None
 
 def show_turn_message(screen, player_name):
@@ -52,13 +52,15 @@ def show_turn_message(screen, player_name):
     text_surf = font.render(text, True, BLACK)
     text_rect = text_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
 
-    # Desenha um retângulo branco cobrindo toda a tela
+    
     screen.fill(WHITE)
     screen.blit(text_surf, text_rect)
     pygame.display.flip()  # Atualiza a tela
 
     # Espera 2 segundos
     pygame.time.wait(2000)
+
+
 
 def start_game(screen):
     field_image = pygame.image.load('assets/tabuleiro.svg')
@@ -115,7 +117,6 @@ def start_game(screen):
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
         
-        # Renderiza as cartas no campo
         for row_key in grid:
             for position in grid[row_key]:  
                 if position['occupied']:
@@ -123,7 +124,6 @@ def start_game(screen):
                     card_image = pygame.transform.scale(card_image, (position['pos'][2], position['pos'][3]))
                     screen.blit(card_image, (position['pos'][0], position['pos'][1]))
 
-        # Renderiza as cartas na mão do jogador atual
         for i, card in enumerate(current_player.hand):
             x, y, width, height = 230 + i * 95, 656, 81, 117
             card_image = pygame.image.load(card.img)
@@ -159,7 +159,7 @@ def start_game(screen):
                             position['occupied'] = True
                             position['card'] = selected_card
                             position['turn_counter'] = 0  # Reseta o contador de turnos ao colocar a carta
-                            
+                            print(f"a carta {selected_card.nome} foi colocada com {selected_card.vida} de vida")
                             sons.tocar_musica_carta()
                             break
                 dragging = False
@@ -167,28 +167,80 @@ def start_game(screen):
 
             # Clique no botão "Passar Turno"
             if event.type == pygame.MOUSEBUTTONDOWN:
-                
                 if pass_button.collidepoint(pygame.mouse.get_pos()):
+                    
+                    opponent = player2 if current_player == player1 else player1
+
+                    print(f"vez do jogador {current_player.name}")
+
+                    current_front_row = grid[f'{current_player.name.lower().replace(" ", "_")}_front_row']
+                    current_back_row = grid[f'{current_player.name.lower().replace(" ", "_")}_back_row']
+                    opponent_front_row = grid[f'{opponent.name.lower().replace(" ", "_")}_front_row']
+                    opponent_back_row = grid[f'{opponent.name.lower().replace(" ", "_")}_back_row']
+
+                    for i in range(0,3):
+                        if current_back_row[i]['card'] is not None:
+                            current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row)
+                            if current_back_row[i]['card'].tipo == 'equipamento' or current_back_row[i]['card'].tipo == 'feitiço':
+                                current_back_row[i]['card'].take_damage(current_back_row[i],1)
+
+                        if current_front_row[i]['card'] is not None:
+                            current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row)
+                            if current_front_row[i]['card'].tipo == 'equipamento' or current_front_row[i]['card'].tipo == 'feitiço':
+                                current_front_row[i]['card'].take_damage(current_front_row[i],1)
+
+                                
+                    for i in range(0,3):
+                        if opponent_back_row[i]['card'] is not None:
+                            opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row)
+
+                            if opponent_back_row[i]['card'].tipo == 'equipamento' or opponent_back_row[i]['card'].tipo == 'feitiço':
+                                opponent_back_row[i]['card'].take_damage(opponent_back_row[i],1)
+
+
+                        if opponent_front_row[i]['card'] is not None:
+                            opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row)
+
+                            if opponent_front_row[i]['card'].tipo == 'equipamento' or opponent_front_row[i]['card'].tipo == 'feitiço':
+                                opponent_front_row[i]['card'].take_damage(opponent_front_row[i],1)
+
+
+                    # Itera pelas posições da linha de frente do jogador atual
+                    for i, front_card in enumerate(current_front_row):
+                        if front_card['occupied']:
+                            if opponent_front_row[i]['occupied'] and opponent_front_row[i]['card'] is not None:
+                                opponent_front_row[i]['card'].take_damage(opponent_front_row[i],front_card['card'].ataque)
+                                
+                          
+                            elif opponent_back_row[i]['occupied'] and opponent_back_row[i]['card'] is not None:
+                                opponent_back_row[i]['card'].take_damage(opponent_back_row[i],front_card['card'].ataque)
+                       
+                                
+                            else:
+                                opponent.take_damage(front_card['card'].ataque)
+
                     sons.tocar_musica_turno()
                     turn_counter += 1  # Incrementa o contador de turnos
                     ctrlPass+=1
+
+
 
                     if(len(player1.hand)<6 and len(player1.deck) > 0 and ctrlPass%2 == 0):
                         player1.hand.append(player1.deck.pop(0))
                     if(len(player2.hand)<6 and len(player2.deck) > 0 and ctrlPass%2 != 0 and ctrlPass !=1):
                         player2.hand.append(player2.deck.pop(0))
 
-                    if turn_counter == 1:  # Quando o jogador clicou uma vez
-                        # Move cartas do back row do jogador adversário para a frente, se houver
-                        if current_player == player1:
-                            move_back_to_front(grid, player2.name)  # Move cartas do player 2
-                        else:
-                            move_back_to_front(grid, player1.name)  # Move cartas do player 1
-                    # Trocar o turno
-                    current_player = player2 if current_player == player1 else player1
-                    turn_counter = 0  # Reinicia o contador geral
 
-        # Se houver uma carta selecionada, segue o mouse enquanto é arrastada
+
+                    if turn_counter == 1:  
+                        if current_player == player1:
+                            move_back_to_front(grid, player2.name) 
+                        else:
+                            move_back_to_front(grid, player1.name)  
+
+                    current_player = player2 if current_player == player1 else player1
+                    turn_counter = 0 
+
         if dragging and selected_card:
             mx, my = pygame.mouse.get_pos()
             card_image = pygame.image.load(selected_card.img)

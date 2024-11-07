@@ -35,8 +35,8 @@ def show_menu(screen):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Verificar cliques nos botões
                 if 440 <= mx <= 567 and 331 <= my <= 369:
-                    #sons.parar_musica()
-                    #sons.tocar_musica_jogo()
+                    sons.parar_musica()
+                    sons.tocar_musica_jogo()
                     return False, True  # Fechar o menu e iniciar o jogo
                 if 453 <= mx <= 548 and 395 <= my <= 433:
                     pygame.quit()
