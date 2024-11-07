@@ -30,22 +30,11 @@ def tocar_musica_jogo():
 def tocar_musica_carta():
     pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
     pygame.mixer.music.set_volume(0.9)
-
     pygame.mixer.music.play()
-
-    
-
-
-
 def tocar_musica_turno():
     pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
     pygame.mixer.music.set_volume(0.9)
-
     pygame.mixer.music.play()  # Toca indefinidamente
-    # Aguarda a duração especificada
-  
-    # Para a música após o tempo especificado
-    pygame.mixer.music.stop()
 
 def tocar_musica_vitoria():
     pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
