@@ -8,17 +8,25 @@ class Card:
         self.descricao = descricao
         self.tipo = tipo
         self.area = area
-
+        # coloquei esses dois novos atributos para as cartas de efeito e feitiço
+        # o effect é pra garantir que o efeito de aplicação unica não vai ser lançado mais de uma vez
+        # o alvo é pra quando o efeito acabar, reverter o efeito na carta
+        # tem um exemplo disso na carta not, já tá toda implementada
+        self.effect=False
+        self.alvo= None
     def take_damage(self,card, damage):
         self.vida-=damage
         if card['card'].vida <=0:
+            card['card'].reverter()
             card['occupied'] = False
             card = None
         print(f"{self.nome} tomou {damage}")
 
     def habilidade(self,atual_row,other_row,front_inimiga,back_inimigo):
         return
-    
+    def reverter(self):
+        return
+        
 class And(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(1,'And', vida, ataque, 'assets/and.svg', descricao, 'tropa','circuitos')
@@ -164,6 +172,34 @@ class Nabla(Card):
 class Not(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(31,'Not', vida, ataque, 'assets/not.svg', descricao, 'equipamento', 'circuitos')
+        
+        
+
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        ist=0
+        
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        
+        self.alvo = other_row[ist]
+
+        if self.alvo['occupied']:
+            if self.alvo['card'].nome != 'Constante' and self.effect is not True:
+                attack = self.alvo['card'].ataque
+                self.alvo['card'].ataque = self.alvo['card'].vida
+                self.alvo['card'].vida = attack
+                print(f"O efeito not foi aplicado na carta {self.alvo['card'].nome} {self.alvo['card'].vida} <=> {self.alvo['card'].ataque}")
+                self.effect = True
+
+    def reverter(self):
+        if self.alvo['occupied']:
+            if self.alvo['card'].nome != 'Constante' and self.effect is not False:
+                attack = self.alvo['card'].ataque
+                self.alvo['card'].ataque = self.alvo['card'].vida
+                self.alvo['card'].vida = attack
+                print(f"O efeito not foi removido na carta {self.alvo['card'].nome} {self.alvo['card'].vida} <=> {self.alvo['card'].ataque}")
+
 
 class Or(Card):
     def __init__(self, vida, ataque, descricao):
