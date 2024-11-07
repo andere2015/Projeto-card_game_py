@@ -1,5 +1,6 @@
 import sys
 import pygame
+import copy
 from constants import WHITE, BLACK, GREEN
 from cartas import cartas_existentes
 
@@ -127,5 +128,5 @@ def deck_builder(screen, player):
 
         pygame.display.flip()
 
-    player.deck = [card for card, count in selected_cards.items() for _ in range(count)]
+    player.deck = [copy.deepcopy(card) for card, count in selected_cards.items() for _ in range(count)]
     return player.deck

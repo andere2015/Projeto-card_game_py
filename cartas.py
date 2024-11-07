@@ -9,15 +9,20 @@ class Card:
         self.tipo = tipo
         self.area = area
 
-def __repr__(self):
-        return f"{self.nome} [VIDA: {self.vida} | ATK: {self.ataque}]\nDescrição: {self.descricao}"
+    def take_damage(self,card, damage):
+        self.vida-=damage
+        if card['card'].vida <=0:
+            card['occupied'] = False
+            card = None
+        print(f"{self.nome} tomou {damage}")
 
-def Habilidade():
-     return Habilidade
-
+    def habilidade(self,atual_row,other_row,front_inimiga,back_inimigo):
+        return
+    
 class And(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(1,'And', vida, ataque, 'assets/and.svg', descricao, 'tropa','circuitos')
+      
 
 class Arp(Card):
     def __init__(self, vida, ataque, descricao):
@@ -30,6 +35,26 @@ class ArvoreB(Card):
 class ArvoreRB(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(4,'Árvore RB', vida, ataque, 'assets/rubro.svg', descricao, 'tropa','algoritmos')
+    #rouba vida dos aliados adjacentes (o roube é igual a metade da vida atual da arvore rn)
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if ist-1 >=0 and atual_row[ist-1]['occupied'] and atual_row[ist-1]['card'].nome != 'Constante':
+            atual_row[ist-1]['card'].take_damage(atual_row[ist-1],2)
+            atual_row[ist]['card'].vida += 2
+            print(f"Arvore RB roubou 2 de vida de {atual_row[ist-1]['card'].nome} que ficou com {atual_row[ist-1]['card'].vida}")
+        
+        if ist+1 <=2 and atual_row[ist+1]['occupied'] and atual_row[ist+1]['card'].nome != 'Constante':
+            atual_row[ist+1]['card'].take_damage(atual_row[ist+1],2)
+            atual_row[ist]['card'].vida += 2
+            print(f"Arvore RB roubou 2 de vida de {atual_row[ist+1]['card'].nome} que ficou com {atual_row[ist-1]['card'].vida}")
+
+
+                
+        
+        
 
 class Bombe(Card):
     def __init__(self, vida, ataque, descricao):
@@ -222,7 +247,7 @@ break_carta = Break(6, 3, "Interrompe o fluxo de execução")
 bug_carta = Bug(8, 5, "Um erro inesperado no código")
 capacitor_carta = Capacitor(6, 2, "Armazena energia em circuitos")
 clockpulse_carta = Clockpulse(7, 3, "Impulsos de clock em circuitos")
-constante_carta = Constante(9, 4, "Valor constante em programação")
+constante_carta = Constante(9, 2, "Valor constante em programação")
 continue_carta = Continue(5, 3, "Continua o fluxo de execução")
 ddos_attack_carta = DdosAttack(10, 7, "Ataque de negação de serviço distribuído")
 derivada_carta = Derivada(11, 6, "Derivada de uma função matemática")
