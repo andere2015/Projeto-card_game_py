@@ -179,38 +179,31 @@ def start_game(screen):
                     opponent_back_row = grid[f'{opponent.name.lower().replace(" ", "_")}_back_row']
 
                     for i in range(0,3):
-                        if current_back_row[i]['occupied']:
+                        if current_back_row[i]['card'] is not None:
                             current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row)
-                            if current_back_row[i]['card'].tipo == 'equipamento':
+                            if current_back_row[i]['card'].tipo == 'equipamento' or current_back_row[i]['card'].tipo == 'feitiço':
                                 current_back_row[i]['card'].take_damage(current_back_row[i],1)
 
-                            if current_back_row[i]['card'].tipo == 'feitiço':
-                                current_back_row[i]['card'].take_damage(current_back_row[i],current_back_row[i]['card'].vida)
-
-                        if current_front_row[i]['occupied']:
+                        if current_front_row[i]['card'] is not None:
                             current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row)
-                            if current_front_row[i]['card'].tipo == 'equipamento':
+                            if current_front_row[i]['card'].tipo == 'equipamento' or current_front_row[i]['card'].tipo == 'feitiço':
                                 current_front_row[i]['card'].take_damage(current_front_row[i],1)
-                            if current_front_row[i]['card'].tipo == 'feitiço':
-                                current_front_row[i]['card'].take_damage(current_front_row[i],current_front_row[i]['card'].vida)
+
                                 
                     for i in range(0,3):
-                        if opponent_back_row[i]['occupied']:
+                        if opponent_back_row[i]['card'] is not None:
                             opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row)
 
-                            if opponent_back_row[i]['card'].tipo == 'equipamento':
+                            if opponent_back_row[i]['card'].tipo == 'equipamento' or opponent_back_row[i]['card'].tipo == 'feitiço':
                                 opponent_back_row[i]['card'].take_damage(opponent_back_row[i],1)
 
-                            if opponent_back_row[i]['card'].tipo == 'feitiço':
-                                opponent_back_row[i]['card'].take_damage(opponent_back_row[i],opponent_back_row[i]['card'].vida)
 
-                        if opponent_front_row[i]['occupied']:
+                        if opponent_front_row[i]['card'] is not None:
                             opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row)
 
-                            if opponent_front_row[i]['card'].tipo == 'equipamento':
+                            if opponent_front_row[i]['card'].tipo == 'equipamento' or opponent_front_row[i]['card'].tipo == 'feitiço':
                                 opponent_front_row[i]['card'].take_damage(opponent_front_row[i],1)
-                            if opponent_front_row[i]['card'].tipo == 'feitiço':
-                                opponent_front_row[i]['card'].take_damage(opponent_front_row[i],opponent_front_row[i]['card'].vida)
+
 
                     # Itera pelas posições da linha de frente do jogador atual
                     for i, front_card in enumerate(current_front_row):

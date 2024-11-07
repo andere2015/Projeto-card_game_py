@@ -1,3 +1,4 @@
+import copy
 class Card:
     def __init__(self, id , nome, vida, ataque, img, descricao,tipo,area):
         self.id = id
@@ -13,14 +14,15 @@ class Card:
         # o alvo é pra quando o efeito acabar, reverter o efeito na carta
         # tem um exemplo disso na carta not, já tá toda implementada
         self.effect=False
-        self.alvo= None
+        self.alvo = []
     def take_damage(self,card, damage):
         self.vida-=damage
         if card['card'].vida <=0:
-            card['card'].reverter()
+            if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
+                card['card'].reverter()
             card['occupied'] = False
             card = None
-        print(f"{self.nome} tomou {damage}")
+        print(f"{self.nome} tomou {damage} | vida atual {self.vida}")
 
     def habilidade(self,atual_row,other_row,front_inimiga,back_inimigo):
         return
@@ -59,11 +61,6 @@ class ArvoreRB(Card):
             atual_row[ist]['card'].vida += 2
             print(f"Arvore RB roubou 2 de vida de {atual_row[ist+1]['card'].nome} que ficou com {atual_row[ist-1]['card'].vida}")
 
-
-                
-        
-        
-
 class Bombe(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(5,'Bombe', vida, ataque, 'assets/bombe.svg', descricao, 'tropa','programação')
@@ -77,8 +74,34 @@ class Bug(Card):
         super().__init__(7,'Bug', vida, ataque, 'assets/bug.svg', descricao, 'tropa','programação')
 
 class Capacitor(Card):
+    
     def __init__(self, vida, ataque, descricao):
         super().__init__(8,'Capacitor', vida, ataque, 'assets/capacitor.svg', descricao, 'equipamento','circuitos')
+        self.copias=[]
+
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        if self.effect is not True:
+            self.effect=True
+            for i in range (0,3):
+                if atual_row[i]['occupied'] is not True or atual_row[i]['card'] == self:
+                    atual_row[i]['card']=self
+                    self.copias.append(atual_row[i])
+                    atual_row[i]['occupied']=True
+                    if other_row[i]['occupied'] and other_row[i]['card'].nome != 'Constante':
+                        other_row[i]['card'].ataque+=2
+                        self.alvo.append(other_row[i])
+                        print(f"A carta {other_row[i]['card'].nome} sofreu efeito do capacitor | {other_row[i]['card'].ataque}")
+        
+    def reverter(self):
+        for cardCopy in self.copias:
+            cardCopy['card']=None
+            cardCopy['occupied']=False
+        for card in self.alvo:
+            if card['occupied']:
+                card['card'].ataque-=2
+                print(f"o efeito do capacitor foi revertido na carta {card['card'].nome} | {card['card'].ataque} ")
+
+
 
 class Clockpulse(Card):
     def __init__(self, vida, ataque, descricao):
@@ -90,15 +113,15 @@ class Constante(Card):
 
 class Continue(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(11,'Continue', vida, ataque, 'assets/continue.svg', descricao, 'feitiço','programação')
+        super().__init__(11,'Continue', 1, 0, 'assets/continue.svg', descricao, 'feitiço','programação')
 
 class DdosAttack(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(12,'DDoS Attack', vida, ataque, 'assets/ddos.svg', descricao, 'feitiço','Redes')
+        super().__init__(12,'DDoS Attack', 1, 0, 'assets/ddos.svg', descricao, 'feitiço','Redes')
 
 class Derivada(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(13,'Derivada', vida, ataque, 'assets/derivada.svg', descricao, 'feitiço','cálculo')
+        super().__init__(13,'Derivada', 1, 0, 'assets/derivada.svg', descricao, 'feitiço','cálculo')
 
 class Dijkstra(Card):
     def __init__(self, vida, ataque, descricao):
@@ -110,11 +133,11 @@ class DoWhile(Card):
 
 class EspacoVetorial(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(16,'Espaco Vetorial', vida, ataque, 'assets/vetorial.svg', descricao, 'feitiço','cálculo')
+        super().__init__(16,'Espaco Vetorial', 1, 0, 'assets/vetorial.svg', descricao, 'feitiço','cálculo')
 
 class Fila(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(17,'Fila', vida, ataque, 'assets/fila.svg', descricao, 'feitiço', 'programação')
+        super().__init__(17,'Fila', 1, 0, 'assets/fila.svg', descricao, 'feitiço', 'programação')
 
 class Firewall(Card):
     def __init__(self, vida, ataque, descricao):
@@ -126,11 +149,11 @@ class FlipFlop(Card):
 
 class Getway(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(20,'Getway', vida, ataque, 'assets/getway.svg', descricao, 'feitiço', 'redes')
+        super().__init__(20,'Getway', 1, 0, 'assets/getway.svg', descricao, 'feitiço', 'redes')
 
 class GrafoPonderado(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(21,'Grafo Ponderado', vida, ataque, 'assets/ponderar.svg', descricao, 'feitiço', 'algoritmos')
+        super().__init__(21,'Grafo Ponderado', 1, 0, 'assets/ponderar.svg', descricao, 'feitiço', 'algoritmos')
 
 class GrafoFonte(Card):
     def __init__(self, vida, ataque, descricao):
@@ -142,7 +165,7 @@ class GrafoSumidouro(Card):
 
 class HeapMaximo(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(24,'Heap Max', vida, ataque, 'assets/heapmax.svg', descricao, 'feitiço', 'algoritmos')
+        super().__init__(24,'Heap Max', 1, 0, 'assets/heapmax.svg', descricao, 'feitiço', 'algoritmos')
 
 class Hub(Card):
     def __init__(self, vida, ataque, descricao):
@@ -150,8 +173,7 @@ class Hub(Card):
 
 class IntegracaoPartes(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(26,'Integracao por Partes', vida, ataque, 'assets/intpartes.svg', descricao, 'equipamento', 'cálculo')
-
+        super().__init__(26,'Integracao por Partes', vida, ataque, 'assets/intpartes.svg', descricao, 'tropa', 'cálculo')
 
 class Integral(Card):
     def __init__(self, vida, ataque, descricao):
@@ -163,7 +185,7 @@ class Karnaugh(Card):
 
 class Multiplexador(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(29,'Multiplexador', vida, ataque, 'assets/multplex.svg', descricao, 'feitiço', 'circuitos')
+        super().__init__(29,'Multiplexador', 1, 0, 'assets/multplex.svg', descricao, 'feitiço', 'circuitos')
 
 class Nabla(Card):
     def __init__(self, vida, ataque, descricao):
@@ -173,8 +195,6 @@ class Not(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(31,'Not', vida, ataque, 'assets/not.svg', descricao, 'equipamento', 'circuitos')
         
-        
-
     def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
         ist=0
         
@@ -182,23 +202,23 @@ class Not(Card):
             if atual_row[i]['card']==self:
                 ist = i
         
-        self.alvo = other_row[ist]
+        self.alvo[0] = other_row[ist]
 
-        if self.alvo['occupied']:
-            if self.alvo['card'].nome != 'Constante' and self.effect is not True:
-                attack = self.alvo['card'].ataque
-                self.alvo['card'].ataque = self.alvo['card'].vida
-                self.alvo['card'].vida = attack
-                print(f"O efeito not foi aplicado na carta {self.alvo['card'].nome} {self.alvo['card'].vida} <=> {self.alvo['card'].ataque}")
+        if self.alvo[0]['occupied']:
+            if self.alvo[0]['card'].nome != 'Constante' and self.effect is not True:
+                attack = self.alvo[0]['card'].ataque
+                self.alvo[0]['card'].ataque = self.alvo[0]['card'].vida
+                self.alvo[0]['card'].vida = attack
+                print(f"O efeito not foi aplicado na carta {self.alvo[0]['card'].nome} {self.alvo[0]['card'].vida} <=> {self.alvo[0]['card'].ataque}")
                 self.effect = True
 
     def reverter(self):
-        if self.alvo['occupied']:
-            if self.alvo['card'].nome != 'Constante' and self.effect is not False:
-                attack = self.alvo['card'].ataque
-                self.alvo['card'].ataque = self.alvo['card'].vida
-                self.alvo['card'].vida = attack
-                print(f"O efeito not foi removido na carta {self.alvo['card'].nome} {self.alvo['card'].vida} <=> {self.alvo['card'].ataque}")
+        if self.alvo[0]['occupied']:
+            if self.alvo[0]['card'].nome != 'Constante' and self.effect is not False:
+                attack = self.alvo[0]['card'].ataque
+                self.alvo[0]['card'].ataque = self.alvo[0]['card'].vida
+                self.alvo[0]['card'].vida = attack
+                print(f"O efeito not foi removido na carta {self.alvo[0]['card'].nome} {self.alvo[0]['card'].vida} <=> {self.alvo[0]['card'].ataque}")
 
 
 class Or(Card):
@@ -207,7 +227,7 @@ class Or(Card):
 
 class Pilha(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(33,'Pilha', vida, ataque, 'assets/pilha.svg', descricao, 'feitiço', 'programação')
+        super().__init__(33,'Pilha', 1, 0, 'assets/pilha.svg', descricao, 'feitiço', 'programação')
 
 class Ponteiro(Card):
     def __init__(self, vida, ataque, descricao):
@@ -227,7 +247,7 @@ class Repetidor(Card):
 
 class Return(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(38,'Return', vida, ataque, 'assets/return.svg', descricao, 'feitiço', 'programação')
+        super().__init__(38,'Return', 1, 0, 'assets/return.svg', descricao, 'feitiço', 'programação')
 
 class Riemann(Card):
     def __init__(self, vida, ataque, descricao):
@@ -243,7 +263,7 @@ class Sniffer(Card):
 
 class Somatorio(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(42,'Somatório', vida, ataque, 'assets/shomatorio.svg', descricao, 'feitiço', 'cálculo')
+        super().__init__(42,'Somatório', 1, 0, 'assets/shomatorio.svg', descricao, 'feitiço', 'cálculo')
 
 class Struct(Card):
     def __init__(self, vida, ataque, descricao):
@@ -259,7 +279,7 @@ class Switch(Card):
 
 class Ttl(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(46,'TTL', vida, ataque, 'assets/ttl.svg', descricao, 'feitiço', 'redes')
+        super().__init__(46,'TTL', 1, 0, 'assets/ttl.svg', descricao, 'feitiço', 'redes')
 
 class Xor(Card):
     def __init__(self, vida, ataque, descricao):
@@ -267,7 +287,7 @@ class Xor(Card):
 
 class TeoremaConfronto(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(48,'Teorema do confronto', vida, ataque, 'assets/confronto.svg', descricao, 'feitiço', 'cálculo')
+        super().__init__(48,'Teorema do confronto', 1, 0, 'assets/confronto.svg', descricao, 'feitiço', 'cálculo')
 
 class SwitchCode(Card):
     def __init__(self, vida, ataque, descricao):
