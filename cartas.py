@@ -21,7 +21,7 @@ class Card:
             if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
                 card['card'].reverter()
             card['occupied'] = False
-            card = None
+            card['card'] = None
         print(f"{self.nome} tomou {damage} | vida atual {self.vida}")
 
     def habilidade(self,atual_row,other_row,front_inimiga,back_inimigo):
@@ -31,12 +31,29 @@ class Card:
         
 class And(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(1,'And', vida, ataque, 'assets/and.svg', descricao, 'tropa','circuitos')
-      
+        super().__init__(1,'And', vida, ataque, 'assets/and.svg', descricao, 'tropa','circuitos')  
 
 class Arp(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(2,'Arp', vida, ataque, 'assets/arp.svg', descricao, 'feitiço','redes')
+        super().__init__(1,'Arp', vida, ataque, 'assets/arp.svg', descricao, 'feitiço','redes')
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+
+        for i in range(0,3):
+            if atual_row[i]['occupied'] is True and  atual_row[i]['card'] != self and atual_row[i]['card'].nome != 'Constante':
+                atual_row[i]['card'].take_damage(atual_row[i],1)
+                print(f"A carta {atual_row[i]['card'].nome} sofreu um de dano do arp")
+
+            if other_row[i]['occupied'] is True and other_row[i]['card'].nome != 'Constante':
+                other_row[i]['card'].take_damage(other_row[i],1)
+                print(f"A carta {other_row[i]['card'].nome} sofreu um de dano do arp")
+
+            if front_inimiga[i]['occupied'] is True and front_inimiga[i]['card'].nome != 'Constante':
+                front_inimiga[i]['card'].take_damage(front_inimiga[i],1)
+                print(f"A carta {front_inimiga[i]['card'].nome} sofreu um de dano do arp")
+
+            if back_inimigo[i]['occupied'] is True and back_inimigo[i]['card'].nome != 'Constante':
+                back_inimigo[i]['card'].take_damage(back_inimigo[i],1)
+                print(f"A carta {back_inimigo[i]['card'].nome} sofreu um de dano do arp")
 
 class ArvoreB(Card):
     def __init__(self, vida, ataque, descricao):
@@ -106,6 +123,23 @@ class Capacitor(Card):
 class Clockpulse(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(9,'Clock Pulse', vida, ataque, 'assets/clock.svg', descricao, 'equipamento','circuitos')
+        self.turno=1
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        self.turno *= -1
+        if(self.turno == 1):
+            if other_row[ist]['occupied']:
+                if front_inimiga[ist]['occupied'] and front_inimiga[ist]['card'].nome != 'Constante':
+                    front_inimiga[ist]['card'].take_damage(front_inimiga[ist],other_row[ist]['card'].ataque)
+                    print(f"a carta {other_row[ist]['card'].nome} atacou mais uma vez fora do seu turno")
+                elif back_inimigo[ist]['occupied'] and back_inimigo[ist]['card'].nome != 'Constante':
+                    back_inimigo[ist]['card'].take_damage(back_inimigo[ist],other_row[ist]['card'].ataque)
+                    print(f"a carta {other_row[ist]['card'].nome} atacou mais uma vez fora do seu turno")
+
+
 
 class Constante(Card):
     def __init__(self, vida, ataque, descricao):
@@ -117,7 +151,23 @@ class Continue(Card):
 
 class DdosAttack(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(12,'DDoS Attack', 1, 0, 'assets/ddos.svg', descricao, 'feitiço','Redes')
+        super().__init__(12,'DDoS Attack', 4, 0, 'assets/ddos.svg', descricao, 'equipamento','Redes')
+
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        
+        for i in range(0,3):
+            if front_inimiga[i]['occupied'] and front_inimiga[i]['card'].nome != 'Constante':
+                if front_inimiga[i]['card'].vida > 1:
+                    self.alvo.append(front_inimiga[i])
+                    front_inimiga[i]['card'].take_damage(front_inimiga[i],2)
+                    print(f"A carta {front_inimiga[i]['card'].nome} sofreu um de dano do arp")
+        self.effect= True
+
+    def reverter(self):
+        for card in self.alvo:
+            if card['occupied'] and self.effect:
+                card['card'].vida+=2
+                print(f"A carta {card['card'].nome} recuperou um de vida")
 
 class Derivada(Card):
     def __init__(self, vida, ataque, descricao):
@@ -141,7 +191,27 @@ class Fila(Card):
 
 class Firewall(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(18,'Fire Wall', vida, ataque, 'assets/firewall.svg', descricao, 'tropa', 'redes')
+        super().__init__(18,'Fire Wall', vida, ataque, 'assets/firewall.svg', descricao, 'equipamento', 'redes')
+        self.copias=[]
+
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        if self.effect is not True:
+            self.effect=True
+            for i in range (0,3):
+                if atual_row[i]['occupied'] is not True or atual_row[i]['card'] == self:
+                    atual_row[i]['card']=self
+                    self.copias.append(atual_row[i])
+                    atual_row[i]['occupied']=True
+                    if other_row[i]['occupied'] and other_row[i]['card'].nome != 'Constante':
+                        other_row[i]['card'].vida+=2
+                        self.alvo.append(other_row[i])
+                        print(f"A carta {other_row[i]['card'].nome} sofreu efeito do firewall | {other_row[i]['card'].vida}")
+        
+    def reverter(self):
+        for cardCopy in self.copias:
+            cardCopy['card']=None
+            cardCopy['occupied']=False
+        
 
 class FlipFlop(Card):
     def __init__(self, vida, ataque, descricao):
@@ -202,7 +272,7 @@ class Not(Card):
             if atual_row[i]['card']==self:
                 ist = i
         
-        self.alvo[0] = other_row[ist]
+        self.alvo.append(other_row[ist])
 
         if self.alvo[0]['occupied']:
             if self.alvo[0]['card'].nome != 'Constante' and self.effect is not True:
@@ -256,6 +326,22 @@ class Riemann(Card):
 class Roteador(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(40,'Roteador', vida, ataque, 'assets/roteador.svg', descricao, 'tropa', 'redes')
+    
+    def habilidade(self, atual_row, other_row, front_inimiga, back_inimigo):
+        if self.effect is not True:
+            for i in range(0,3):
+                if other_row[i]['occupied'] and other_row[i]['card'].area == 'redes':
+                    other_row[i]['card'].ataque += 1
+                    self.alvo.append(other_row[i])
+                    self.effect = True
+                    print(f"a carta {other_row[i]['card'].nome} recebeu ponto de ataque")
+
+    def reverter(self):
+        if self.effect is True:
+            for card in self.alvo:
+                if card['occupied']:
+                    card['card'].ataque-=1
+                    print(f"a carta {card['card'].nome} vou tou ao seu atque normal")
 
 class Sniffer(Card):
     def __init__(self, vida, ataque, descricao):
@@ -294,7 +380,7 @@ class SwitchCode(Card):
         super().__init__(48,'Código Switch', vida, ataque, 'assets/switchC.svg', descricao, 'equipamento', 'programação')
 
 
-and_carta = And(10, 5, "A porta lógica AND é muito forte e tal tal tal")
+and_carta = And(50, 1, "A porta lógica AND é muito forte e tal tal tal")
 arp_carta = Arp(8, 4, "Ataque de ARP spoofing")
 arvore_b_carta = ArvoreB(12, 7, "Árvore B para organização de dados")
 arvore_rb_carta = ArvoreRB(14, 9, "Árvore Vermelho-Preto equilibrada")
