@@ -74,7 +74,7 @@ def deck_builder(screen, player):
     selected_cards = {}
     available_cards = cartas_existentes
     modal_card = None  # Variável para armazenar a carta que será exibida no modal
-    scroll_offset = 0  # Offset para controlar a rolagem
+    scroll_offset = 10  # Offset para controlar a rolagem
 
     while sum(selected_cards.values()) < 10:
         screen.fill(WHITE)
@@ -93,7 +93,7 @@ def deck_builder(screen, player):
 
                 # Controle do scroll
                 if event.button == 4:  # Rolagem para cima
-                    scroll_offset = min(scroll_offset + 40, 0)  # Aumenta o valor para rolagem mais rápida
+                    scroll_offset = min(scroll_offset + 20, 0)  # Aumenta o valor para rolagem mais rápida
                 elif event.button == 5:  # Rolagem para baixo
                     scroll_offset -= 40  # Aumenta o valor para rolagem mais rápida
 

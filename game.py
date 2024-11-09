@@ -229,8 +229,7 @@ def start_game(screen):
                         player1.hand.append(player1.deck.pop(0))
                     if(len(player2.hand)<6 and len(player2.deck) > 0 and ctrlPass%2 != 0 and ctrlPass !=1):
                         player2.hand.append(player2.deck.pop(0))
-
-
+ 
 
                     if turn_counter == 1:  
                         if current_player == player1:
