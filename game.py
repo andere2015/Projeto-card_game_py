@@ -7,6 +7,7 @@ from player import Player
 from deck_builder import deck_builder
 import sons
 import time
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect(center=(x, y))
@@ -28,6 +29,37 @@ def draw_button(surface, text, x, y, width, height, color, hover_color):
     surface.blit(text_surf, text_rect)
 
     return button_rect
+
+def show_end_screen(screen, winner_name):
+    sons.tocar_musica_vitoria()
+  # Tela de finalização com mensagem do vencedor
+    field_image = pygame.image.load('assets/TELA_FINAL.svg')
+    field_image = pygame.transform.scale(field_image, (1000, 800))
+    screen.blit(field_image, (0, 0))
+
+    font = pygame.font.SysFont(None, 50)
+    text = f"{winner_name} venceu!"
+    draw_text(text, font, BLACK, screen, screen.get_width() // 2, screen.get_height() // 2 - 50)
+
+    # Botões centralizados
+    replay_button = draw_button(screen, 'Jogar Novamente', 360, 400, 200, 50, WHITE, (0, 255, 0))
+    quit_button = draw_button(screen, 'Sair', 560, 400, 80, 50, WHITE, (200, 0, 0))
+
+    pygame.display.flip()
+
+    # Loop da tela de fim
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if replay_button.collidepoint(event.pos):
+                    start_game(screen)  # Reinicia o jogo
+                    return
+                elif quit_button.collidepoint(event.pos):
+                    pygame.quit()
+                    sys.exit()
 
 def move_back_to_front(grid, player_name):
     # Ajustando a chave para corresponder ao grid
@@ -133,6 +165,13 @@ def start_game(screen):
         # Botão de passar turno
         pass_button = draw_button(screen, 'Passar vez', 10, 300, 120, 50, (0,0,255), GREEN)
 
+        if player1.life <= 0:
+            show_end_screen(screen, player2.name)
+            return
+        elif player2.life <= 0:
+            show_end_screen(screen, player1.name)
+            return
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

@@ -3,7 +3,7 @@ import pygame
 class Player:
     def __init__(self, name):
         self.name = name
-        self.life = 20
+        self.life = 1
         self.hand = []
         self.deck = []
     
@@ -11,5 +11,6 @@ class Player:
         self.life-=damage
         print(f"{self.name} tomou {damage} de dano")
 
+   
             
     
