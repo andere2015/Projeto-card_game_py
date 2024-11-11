@@ -179,26 +179,29 @@ def start_game(screen):
                     opponent_back_row = grid[f'{opponent.name.lower().replace(" ", "_")}_back_row']
 
                     for i in range(0,3):
-                        if current_back_row[i]['card'] is not None:
-                            current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row)
+                        if current_back_row[i]['card'] is not None and current_back_row[i]['card'].nome != 'Sniffer':
+                            if current_back_row[i]['card'].nome == 'Sniffer':
+                                current_back_row[i]['card'].habilidade(current_player,opponent)
+                            else:
+                                current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row)
                             if current_back_row[i]['card'].tipo == 'equipamento' or current_back_row[i]['card'].tipo == 'feitiço':
                                 current_back_row[i]['card'].take_damage(current_back_row[i],1)
 
-                        if current_front_row[i]['card'] is not None:
+                        if current_front_row[i]['card'] is not None and current_front_row[i]['card'].nome == 'Sniffer':
                             current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row)
                             if current_front_row[i]['card'].tipo == 'equipamento' or current_front_row[i]['card'].tipo == 'feitiço':
                                 current_front_row[i]['card'].take_damage(current_front_row[i],1)
 
                                 
                     for i in range(0,3):
-                        if opponent_back_row[i]['card'] is not None:
+                        if opponent_back_row[i]['card'] is not None and opponent_back_row[i]['card'].nome != 'Sniffer':
                             opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row)
 
                             if opponent_back_row[i]['card'].tipo == 'equipamento' or opponent_back_row[i]['card'].tipo == 'feitiço':
                                 opponent_back_row[i]['card'].take_damage(opponent_back_row[i],1)
 
 
-                        if opponent_front_row[i]['card'] is not None:
+                        if opponent_front_row[i]['card'] is not None and opponent_front_row[i]['card'].nome != 'Sniffer':
                             opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row)
 
                             if opponent_front_row[i]['card'].tipo == 'equipamento' or opponent_front_row[i]['card'].tipo == 'feitiço':
