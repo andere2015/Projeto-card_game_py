@@ -1,4 +1,5 @@
 import copy
+import sons
 class Card:
     def __init__(self, id , nome, vida, ataque, img, descricao,tipo,area):
         self.id = id
@@ -20,6 +21,7 @@ class Card:
         if card['card'].vida <=0:
             if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
                 card['card'].reverter()
+                sons.tocar_musica_morte()
             card['occupied'] = False
             card['card'] = None
         print(f"{self.nome} tomou {damage} | vida atual {self.vida}")
