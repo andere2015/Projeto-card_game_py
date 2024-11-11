@@ -19,9 +19,10 @@ class Card:
     def take_damage(self,card, damage):
         self.vida-=damage
         if card['card'].vida <=0:
+            sons.tocar_musica_morte()
             if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
                 card['card'].reverter()
-                sons.tocar_musica_morte()
+                
             card['occupied'] = False
             card['card'] = None
         print(f"{self.nome} tomou {damage} | vida atual {self.vida}")
