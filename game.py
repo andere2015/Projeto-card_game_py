@@ -95,9 +95,9 @@ def show_turn_message(screen, player_name):
 
 
 def start_game(screen):
+    sons.tocar_musica_jogo()
     field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (1000, 800))
-
     player1 = Player("player 1")
     player2 = Player("player 2")
     
