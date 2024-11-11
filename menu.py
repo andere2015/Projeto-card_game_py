@@ -11,7 +11,7 @@ def draw_text(text, font, color, surface, x, y):
 def show_menu(screen):
     # Configuração da fonte e carregamento da música do menu
     font = pygame.font.SysFont(None, 40)
-    #sons.tocar_musica_menu()
+    sons.tocar_musica_menu()
 
     running = True
     while running:
