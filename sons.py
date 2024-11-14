@@ -39,15 +39,15 @@ def tocar_musica_turno():
     turno.play() 
 
 def tocar_musica_morte():
-    morte = pygame.mixer.Sound('assets/dano.mp3')  # Carrega a música do jogo
-    morte.set_volume(0.9)
+    morte = pygame.mixer.Sound('assets/dano.mp3')  
+    morte.set_volume(0.7)
     morte.play() 
 
 
 def tocar_musica_vitoria():
-    pygame.mixer.music.load('assets/carta.mp3')  # Carrega a música do jogo
+    pygame.mixer.music.load('assets/carta.mp3')  
     pygame.mixer.music.set_volume(0.9)
-    pygame.mixer.music.play()  # Toca indefinidamente
+    pygame.mixer.music.play()  
   
 
 

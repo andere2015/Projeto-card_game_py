@@ -11,7 +11,6 @@ def main():
     pygame.display.set_caption("Cartas Massa")
     menu = True
     playing = False
-    
 
     while True:
         if menu:

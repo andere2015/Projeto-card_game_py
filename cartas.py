@@ -1,5 +1,5 @@
 import copy
-import sons
+import sons, random,time,pygame
 class Card:
     def __init__(self, id , nome, vida, ataque, img, descricao,tipo,area):
         self.id = id
@@ -18,15 +18,26 @@ class Card:
         self.alvo = []
     def take_damage(self,card, damage):
         self.vida-=damage
+        time.sleep(0.3)
+        card['pos'][0] -= 100
+        pygame.display.flip()
+        time.sleep(0.3)
+        card['pos'][0] += 200
+        pygame.display.flip()
+        time.sleep(0.3)
+        card['pos'][0] -= 100
+        pygame.display.flip()
+        
+
         if card['card'].vida <=0:
+            sons.tocar_musica_morte()
             if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
                 card['card'].reverter()
-                sons.tocar_musica_morte()
             card['occupied'] = False
             card['card'] = None
         print(f"{self.nome} tomou {damage} | vida atual {self.vida}")
 
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
         return
     def reverter(self):
         return
@@ -38,7 +49,9 @@ class And(Card):
 class Arp(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(1,'Arp', vida, ataque, 'assets/arp.svg', descricao, 'feitiço','redes')
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+        
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
+
         for i in range(0,3):
             if atual_row[i]['occupied'] is True and  atual_row[i]['card'] != self and atual_row[i]['card'].nome != 'Constante':
                 print(f"A carta {atual_row[i]['card'].nome} sofreu um de dano do arp")
@@ -69,7 +82,7 @@ class ArvoreRB(Card):
         super().__init__(4,'Árvore RB', vida, ataque, 'assets/rubro.svg', descricao, 'tropa','algoritmos')
     #rouba vida dos aliados adjacentes (o roube é igual a metade da vida atual da arvore rn)
     
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         ist=0
         for i in range(0,3):
@@ -82,7 +95,7 @@ class ArvoreRB(Card):
             
         
         if ist+1 <=2 and atual_row[ist+1]['occupied'] and atual_row[ist+1]['card'].nome != 'Constante':
-            print(f"Arvore RB roubou 2 de vida de {atual_row[ist+1]['card'].nome} que ficou com {atual_row[ist-1]['card'].vida}")
+            print(f"Arvore RB roubou 2 de vida de {atual_row[ist+1]['card'].nome} que ficou com {atual_row[ist+1]['card'].vida}")
             atual_row[ist+1]['card'].take_damage(atual_row[ist+1],2)
             atual_row[ist]['card'].vida += 2
             
@@ -90,6 +103,14 @@ class ArvoreRB(Card):
 class Bombe(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(5,'Bombe', vida, ataque, 'assets/bombe.svg', descricao, 'tropa','programação')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if self.effect is False:
+            for i in range(0,3):
+                if front_inimiga[i]['occupied']:
+                    if front_inimiga[i]['card'].nome !='Constante':
+                        print(f"a carta {front_inimiga[i]['card'].nome} teve o ataque reduzido pelo bombe")
+                        front_inimiga[i]['card'].ataque-=1
+            self.effect=True
 
 class Break(Card):
     def __init__(self, vida, ataque, descricao):
@@ -98,6 +119,28 @@ class Break(Card):
 class Bug(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(7,'Bug', vida, ataque, 'assets/bug.svg', descricao, 'tropa','programação')
+    
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if self.effect is False:
+            for i in range(0,3):
+                if atual_row[i]['occupied'] and atual_row[i]['card'].tipo == 'tropa' and atual_row[i]['card'].nome != 'Constante':
+                    self.alvo.append(atual_row[i]['card'])
+                if other_row[i]['occupied'] and other_row[i]['card'].tipo == 'tropa' and other_row[i]['card'].nome != 'Constante':
+                    self.alvo.append(other_row[i]['card'])
+                if back_inimigo[i]['occupied'] and back_inimigo[i]['card'].tipo == 'tropa' and back_inimigo[i]['card'].nome != 'Constante':
+                    self.alvo.append(back_inimigo[i]['card'])
+                if front_inimiga[i]['occupied'] and front_inimiga[i]['card'].tipo == 'tropa' and front_inimiga[i]['card'].nome != 'Constante':
+                    self.alvo.append(front_inimiga[i]['card'])
+            if len(self.alvo) <=3:
+                for card in self.alvo:
+                    card.ataque -= 2
+                    print(f"A carta {card.nome} teve o ataque reduzido pelo bug")
+            elif len(self.alvo)>3:
+                self.alvo = random.sample(self.alvo,3)
+                for card in self.alvo:
+                    card.ataque -=2
+                    print(f"A carta {card.nome} teve o ataque reduzido pelo bug")
+            self.effect=True
 
 class Capacitor(Card):
     
@@ -105,7 +148,7 @@ class Capacitor(Card):
         super().__init__(8,'Capacitor', vida, ataque, 'assets/capacitor.svg', descricao, 'equipamento','circuitos')
         self.copias=[]
 
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         if self.effect is not True:
             self.effect=True
@@ -134,7 +177,7 @@ class Clockpulse(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(9,'Clock Pulse', vida, ataque, 'assets/clock.svg', descricao, 'equipamento','circuitos')
         self.turno=1
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         ist=0
         for i in range(0,3):
@@ -164,7 +207,7 @@ class DdosAttack(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(12,'DDoS Attack', 4, 0, 'assets/ddos.svg', descricao, 'equipamento','Redes')
 
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         
         for i in range(0,3):
@@ -200,13 +243,19 @@ class EspacoVetorial(Card):
 class Fila(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(17,'Fila', 1, 0, 'assets/fila.svg', descricao, 'feitiço', 'programação')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if len(player.hand)<6 and len(player.deck)>0:
+            player.hand.append(player.hand.pop())
+
+            print(f"a o {player.name} recebeu a ultima carta do seu dack")
+        
 
 class Firewall(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(18,'Fire Wall', vida, ataque, 'assets/firewall.svg', descricao, 'equipamento', 'redes')
         self.copias=[]
 
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         if self.effect is not True:
             self.effect=True
@@ -249,6 +298,17 @@ class GrafoSumidouro(Card):
 class HeapMaximo(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(24,'Heap Max', 1, 0, 'assets/heapmax.svg', descricao, 'feitiço', 'algoritmos')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        player.deck.sort(key=lambda Card: Card.ataque, reverse=True)
+        print(f"O baralho do {player.name} foi ordenado")
+
+class HeapMinimo(Card):
+    def __init__(self, vida, ataque, descricao):
+        super().__init__(24,'Heap Max', 1, 0, 'assets/heapmin.svg', descricao, 'feitiço', 'algoritmos')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        player.deck.sort(key=lambda Card: Card.ataque)
+        print(f"O baralho do {player.name} foi ordenado")
+
 
 class Hub(Card):
     def __init__(self, vida, ataque, descricao):
@@ -278,7 +338,7 @@ class Not(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(31,'Not', vida, ataque, 'assets/not.svg', descricao, 'equipamento', 'circuitos')
         
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         ist=0
         
@@ -312,6 +372,11 @@ class Or(Card):
 class Pilha(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(33,'Pilha', 1, 0, 'assets/pilha.svg', descricao, 'feitiço', 'programação')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if len(player.hand)<6 and len(player.deck)>0:
+            player.hand.append(player.hand.pop(0))
+
+            print(f"a o {player.name} recebeu a ultima carta do seu dack")
 
 class Ponteiro(Card):
     def __init__(self, vida, ataque, descricao):
@@ -332,6 +397,40 @@ class Repetidor(Card):
 class Return(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(38,'Return', 1, 0, 'assets/return.svg', descricao, 'feitiço', 'programação')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        
+        for i in range(0,3):
+            if other_row[i]['occupied'] is True and other_row[i]['card'].nome != 'Constante':
+                print(f"A carta {other_row[i]['card'].nome} retornou para a mão do jogador")
+                if len(player.hand)<6:
+                    player.hand.append(other_row[i]['card'])
+                else:
+                    player.deck.append(other_row[i]['card'])
+                atual_row[i]['card']=None
+                atual_row[i]['occupied']=False
+
+            elif front_inimiga[i]['occupied'] is True and front_inimiga[i]['card'].nome != 'Constante':
+                print(f"A carta {front_inimiga[i]['card'].nome} retornou para a mão do jogador")
+                if len(player.hand)<6:
+                    player.hand.append(front_inimiga[i]['card'])
+                else:
+                    player.deck.append(front_inimiga[i]['card'])
+                front_inimiga[i]['card']=None
+                front_inimiga[i]['occupied']=False
+
+            elif back_inimigo[i]['occupied'] is True and back_inimigo[i]['card'].nome != 'Constante':
+                print(f"A carta {back_inimigo[i]['card'].nome} retornou para a mão do jogador")
+                if len(player.hand)<6:
+                    player.hand.append(back_inimigo[i]['card'])
+                else:
+                    player.deck.append(back_inimigo[i]['card'])
+                back_inimigo[i]['card']=None
+                back_inimigo[i]['occupied']=False
 
 class Riemann(Card):
     def __init__(self, vida, ataque, descricao):
@@ -341,7 +440,7 @@ class Roteador(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(40,'Roteador', vida, ataque, 'assets/roteador.svg', descricao, 'tropa', 'redes')
     
-    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
 
         if self.effect is not True:
             for i in range(0,3):
@@ -361,7 +460,8 @@ class Roteador(Card):
 class Sniffer(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(41,'Sniffer', vida, ataque, 'assets/sniffer.svg', descricao, 'tropa', 'redes')
-    def habilidade(self, player,opponent):
+
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
         if self.effect is False:
             player.deck.append(opponent.hand.pop(0))
             self.effect=True
@@ -381,8 +481,6 @@ class SubstituicaoTrigonometrica(Card):
 class Switch(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(45,'Switch', vida, ataque, 'assets/switch.svg', descricao, 'tropa', 'redes')
-    
-
 
 class Ttl(Card):
     def __init__(self, vida, ataque, descricao):
@@ -404,7 +502,6 @@ class Ttl(Card):
         elif back_inimigo[ist]['occupied'] and back_inimigo[ist]['card'].nome!='Constante' and back_inimigo[ist]['card'].tipo!='feitiço':
             back_inimigo[ist]['card'].tipo = 'equipamento'
             print(f"a vida da carta {back_inimigo[ist]['card'].nome} agora é ttl")
-
 
 class Xor(Card):
     def __init__(self, vida, ataque, descricao):
@@ -442,7 +539,9 @@ getway_carta = Getway(8, 5, "Dispositivo de comunicação em redes")
 grafo_ponderado_carta = GrafoPonderado(12, 7, "Grafo com pesos nas arestas")
 grafo_fonte_carta = GrafoFonte(11, 6, "Grafo com um único vértice de origem")
 grafo_sumidouro_carta = GrafoSumidouro(11, 6, "Grafo com um único vértice de destino")
-heap_maximo_carta = HeapMaximo(10, 7, "Heap máximo para gerenciamento de prioridades")
+heap_maximo_carta = HeapMaximo(1, 0, "Heap máximo para gerenciamento de prioridades")
+heap_minimo_carta = HeapMinimo(1, 0, "Heap mínimo para gerenciamento de prioridades")
+
 hub_carta = Hub(8, 4, "Dispositivo concentrador de redes")
 integracao_partes_carta = IntegracaoPartes(11, 6, "Método de integração por partes")
 integral_carta = Integral(10, 5, "Cálculo integral")
@@ -473,7 +572,7 @@ cartas_existentes = [
     and_carta, arp_carta, arvore_b_carta, arvore_rb_carta, bombe_carta, break_carta, bug_carta, 
     capacitor_carta, clockpulse_carta, constante_carta, continue_carta, ddos_attack_carta, derivada_carta, 
     dijkstra_carta, do_while_carta, espaco_vetorial_carta, fila_carta, firewall_carta, flipflop_carta, 
-    getway_carta, grafo_ponderado_carta, grafo_fonte_carta, grafo_sumidouro_carta, heap_maximo_carta, 
+    getway_carta, grafo_ponderado_carta, grafo_fonte_carta, grafo_sumidouro_carta, heap_maximo_carta,heap_minimo_carta, 
     hub_carta, integracao_partes_carta, integral_carta, karnaugh_carta, multiplexador_carta, nabla_carta, 
     not_carta, or_carta, pilha_carta, ponteiro_carta, registrador_carta, regra_cadeia_carta, repetidor_carta, 
     return_carta, riemann_carta, roteador_carta, sniffer_carta, somatorio_carta, struct_carta, 

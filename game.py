@@ -2,16 +2,18 @@
 import pygame
 import sys
 import random
-from constants import WHITE, GREEN, BLACK
+from constants import WHITE, GREEN, BLACK, RED
 from player import Player
 from deck_builder import deck_builder
 import sons
 import time
 
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect(center=(x, y))
     surface.blit(textobj, textrect)
+
 
 
 def draw_button(surface, text, x, y, width, height, color, hover_color):
@@ -29,6 +31,45 @@ def draw_button(surface, text, x, y, width, height, color, hover_color):
     surface.blit(text_surf, text_rect)
 
     return button_rect
+
+def draw_player_life(screen, player1, player2):
+    
+    circuloVida = pygame.image.load("assets/circuloVida.svg")
+    circuloVida = pygame.transform.scale(circuloVida, (82, 82))
+    
+
+    circuloVida = pygame.image.load("assets/circuloVida.svg")
+    circuloVida.blit
+    full_life_color = GREEN  # Cor da vida cheia
+    empty_life_color = RED  # Cor da vida vazia
+    bar_width, bar_height = 60, 60  # Tamanho da barra de vida
+
+    # Desenhar barra de vida para o jogador 1
+    player1_life_ratio = player1.life / 20  # Proporção da vida atual sobre o máximo
+    player1_life_width = int(bar_width * player1_life_ratio)  # Largura proporcional ao valor de vida atual
+    pygame.draw.rect(screen, empty_life_color, (110,701, bar_width, bar_height))  # Barra vazia
+    pygame.draw.rect(screen, full_life_color, (110,701, player1_life_width, bar_height))  # Vida atual
+
+    # Desenhar barra de vida para o jogador 2
+    player2_life_ratio = player2.life / 20
+    player2_life_width = int(bar_width * player2_life_ratio)
+    pygame.draw.rect(screen, empty_life_color, (830,694, bar_width, bar_height))  # Barra vazia
+    pygame.draw.rect(screen, full_life_color, (830,694, player2_life_width, bar_height))  # Vida atual
+    font = pygame.font.SysFont(None, 30)
+# Renderizar o texto da vida dos jogadores
+    player1_text = font.render(f"{player1.life}", True, BLACK)
+    player2_text = font.render(f"{player2.life}", True, BLACK)
+
+    # Centralizar o texto na posição desejada
+    player1_text_rect = player1_text.get_rect(center=(135, 726))
+    player2_text_rect = player2_text.get_rect(center=(840, 726))
+
+    # Exibir o texto e os círculos
+    screen.blit(player1_text, player1_text_rect)
+    screen.blit(player2_text, player2_text_rect)
+    screen.blit(circuloVida, (101, 692))
+    screen.blit(circuloVida, (820, 684))
+
 
 def show_end_screen(screen, winner_name):
     sons.tocar_musica_vitoria()
@@ -95,9 +136,9 @@ def show_turn_message(screen, player_name):
 
 
 def start_game(screen):
-    sons.tocar_musica_jogo()
     field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (1000, 800))
+
     player1 = Player("player 1")
     player2 = Player("player 2")
     
@@ -128,27 +169,27 @@ def start_game(screen):
 
     # Definindo o grid com estados de ocupação e contadores de turnos
     grid = {
-        'player_1_back_row': [{'pos': (347, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (468, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                              {'pos': (593, 504, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
+        'player_1_back_row': [{'pos': [347, 504, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': [468, 504, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0},
+                              {'pos': [593, 504, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0}],
         
-        'player_1_front_row': [{'pos': (347, 376, 80, 114), 'occupied': False, 'card': None},
-                               {'pos': (471, 376, 80, 114), 'occupied': False, 'card': None},
-                               {'pos': (593, 376, 80, 114), 'occupied': False, 'card': None}],
+        'player_1_front_row': [{'pos': [347, 376, 80, 114], 'occupied': False, 'card': None},
+                               {'pos': [471, 376, 80, 114], 'occupied': False, 'card': None},
+                               {'pos': [593, 376, 80, 114], 'occupied': False, 'card': None}],
         
-        'player_2_front_row':  [{'pos': (347, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                                {'pos': (470, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0},
-                                {'pos': (593, 189, 80, 114), 'occupied': False, 'card': None, 'turn_counter': 0}],
+        'player_2_front_row':  [{'pos': [347, 189, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0},
+                                {'pos': [470, 189, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0},
+                                {'pos': [593, 189, 80, 114], 'occupied': False, 'card': None, 'turn_counter': 0}],
         
-        'player_2_back_row': [ {'pos': (347, 60, 80, 114), 'occupied': False, 'card': None},
-                               {'pos': (470, 60, 80, 114), 'occupied': False, 'card': None},
-                               {'pos': (593, 60, 80, 114), 'occupied': False, 'card': None}],
+        'player_2_back_row': [ {'pos': [347, 60, 80, 114], 'occupied': False, 'card': None},
+                               {'pos': [470, 60, 80, 114], 'occupied': False, 'card': None},
+                               {'pos': [593, 60, 80, 114], 'occupied': False, 'card': None}],
     }
 
     while True:
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
-        
+        draw_player_life(screen, player1, player2)
         for row_key in grid:
             for position in grid[row_key]:  
                 if position['occupied']:
@@ -218,30 +259,26 @@ def start_game(screen):
                     opponent_back_row = grid[f'{opponent.name.lower().replace(" ", "_")}_back_row']
 
                     for i in range(0,3):
-                        if current_back_row[i]['card'] is not None and current_back_row[i]['card'].nome != 'Sniffer':
-                            if current_back_row[i]['card'].nome == 'Sniffer':
-                                current_back_row[i]['card'].habilidade(current_player,opponent)
-                            else:
-                                current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row)
+                        if current_back_row[i]['card'] is not None:
+                            current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row, current_player,opponent)
                             if current_back_row[i]['card'].tipo == 'equipamento' or current_back_row[i]['card'].tipo == 'feitiço':
                                 current_back_row[i]['card'].take_damage(current_back_row[i],1)
 
-                        if current_front_row[i]['card'] is not None and current_front_row[i]['card'].nome == 'Sniffer':
-                            current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row)
+                        if current_front_row[i]['card'] is not None:
+                            current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row, current_player,opponent)
                             if current_front_row[i]['card'].tipo == 'equipamento' or current_front_row[i]['card'].tipo == 'feitiço':
                                 current_front_row[i]['card'].take_damage(current_front_row[i],1)
-
                                 
                     for i in range(0,3):
-                        if opponent_back_row[i]['card'] is not None and opponent_back_row[i]['card'].nome != 'Sniffer':
-                            opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row)
+                        if opponent_back_row[i]['card'] is not None:
+                            opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row,opponent, current_player)
 
                             if opponent_back_row[i]['card'].tipo == 'equipamento' or opponent_back_row[i]['card'].tipo == 'feitiço':
                                 opponent_back_row[i]['card'].take_damage(opponent_back_row[i],1)
 
 
-                        if opponent_front_row[i]['card'] is not None and opponent_front_row[i]['card'].nome != 'Sniffer':
-                            opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row)
+                        if opponent_front_row[i]['card'] is not None:
+                            opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row,opponent, current_player)
 
                             if opponent_front_row[i]['card'].tipo == 'equipamento' or opponent_front_row[i]['card'].tipo == 'feitiço':
                                 opponent_front_row[i]['card'].take_damage(opponent_front_row[i],1)
