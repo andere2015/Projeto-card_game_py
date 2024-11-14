@@ -83,8 +83,8 @@ def show_end_screen(screen, winner_name):
     draw_text(text, font, BLACK, screen, screen.get_width() // 2, screen.get_height() // 2 - 50)
 
     # Botões centralizados
-    replay_button = draw_button(screen, 'Jogar Novamente', 360, 400, 200, 50, WHITE, (0, 255, 0))
-    quit_button = draw_button(screen, 'Sair', 560, 400, 80, 50, WHITE, (200, 0, 0))
+    replay_button = draw_button(screen, 'Jogar Novamente',  screen.get_width() // 2 - 100, 400, 200, 50, WHITE, (0, 255, 0))
+    quit_button = draw_button(screen, 'Sair',  screen.get_width() // 2 - 40, 460, 80, 50, WHITE, (200, 0, 0))
 
     pygame.display.flip()
 
