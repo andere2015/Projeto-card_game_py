@@ -138,13 +138,13 @@ def draw_damage_animation(card):
     
 
 def show_atributes(screen,card):
-    font = pygame.font.SysFont(None, 25)
+    font = pygame.font.SysFont(None, 20)
 
     text_life = font.render(f"{card['card'].vida}", True, BLACK)
     text_attack = font.render(f"{card['card'].ataque}", True, BLACK)
     
-    attack_pos = (card['pos'][0]+15,card['pos'][1]+card['pos'][3]-30)
-    life_pos = (card['pos'][0]+card['pos'][2]-15,card['pos'][1]+card['pos'][3]-30)
+    attack_pos = (card['pos'][0]+20,card['pos'][1]+card['pos'][3]-25)
+    life_pos = (card['pos'][0]+card['pos'][2]-20,card['pos'][1]+card['pos'][3]-25)
     
     screen.blit(text_life, life_pos)
     screen.blit(text_attack, attack_pos)
