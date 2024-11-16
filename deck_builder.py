@@ -76,6 +76,7 @@ def draw_modal(screen, card):
     
 # Função para construir o deck com rolagem
 def deck_builder(screen, player):
+    
     font = pygame.font.SysFont(None, 30)
     selected_cards = {}
     available_cards = cartas_existentes

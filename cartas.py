@@ -17,18 +17,8 @@ class Card:
         self.effect=False
         self.alvo = []
     def take_damage(self,card, damage):
-        self.vida-=damage
-        time.sleep(0.3)
-        card['pos'][0] -= 100
-        pygame.display.flip()
-        time.sleep(0.3)
-        card['pos'][0] += 200
-        pygame.display.flip()
-        time.sleep(0.3)
-        card['pos'][0] -= 100
-        pygame.display.flip()
-        
-
+        if damage>0:
+            self.vida-=damage
         if card['card'].vida <=0:
             sons.tocar_musica_morte()
             if len(card['card'].alvo)>0 or card['card'].nome == 'Capacitor':
@@ -541,7 +531,6 @@ grafo_fonte_carta = GrafoFonte(11, 6, "Grafo com um único vértice de origem")
 grafo_sumidouro_carta = GrafoSumidouro(11, 6, "Grafo com um único vértice de destino")
 heap_maximo_carta = HeapMaximo(1, 0, "Heap máximo para gerenciamento de prioridades")
 heap_minimo_carta = HeapMinimo(1, 0, "Heap mínimo para gerenciamento de prioridades")
-
 hub_carta = Hub(8, 4, "Dispositivo concentrador de redes")
 integracao_partes_carta = IntegracaoPartes(11, 6, "Método de integração por partes")
 integral_carta = Integral(10, 5, "Cálculo integral")

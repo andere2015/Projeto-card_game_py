@@ -44,7 +44,7 @@ def draw_player_life(screen, player1, player2):
     empty_life_color = RED  # Cor da vida vazia
     bar_width, bar_height = 60, 60  # Tamanho da barra de vida
 
-    # Desenhar barra de vida para o jogador 1
+
     player1_life_ratio = player1.life / 20  # Proporção da vida atual sobre o máximo
     player1_life_width = int(bar_width * player1_life_ratio)  # Largura proporcional ao valor de vida atual
     pygame.draw.rect(screen, empty_life_color, (110,701, bar_width, bar_height))  # Barra vazia
@@ -56,15 +56,15 @@ def draw_player_life(screen, player1, player2):
     pygame.draw.rect(screen, empty_life_color, (830,694, bar_width, bar_height))  # Barra vazia
     pygame.draw.rect(screen, full_life_color, (830,694, player2_life_width, bar_height))  # Vida atual
     font = pygame.font.SysFont(None, 30)
-# Renderizar o texto da vida dos jogadores
+
     player1_text = font.render(f"{player1.life}", True, BLACK)
     player2_text = font.render(f"{player2.life}", True, BLACK)
 
-    # Centralizar o texto na posição desejada
-    player1_text_rect = player1_text.get_rect(center=(135, 726))
-    player2_text_rect = player2_text.get_rect(center=(840, 726))
+    
+    player1_text_rect = player1_text.get_rect(center=(142, 733))
+    player2_text_rect = player2_text.get_rect(center=(861, 725))
 
-    # Exibir o texto e os círculos
+    
     screen.blit(player1_text, player1_text_rect)
     screen.blit(player2_text, player2_text_rect)
     screen.blit(circuloVida, (101, 692))
@@ -130,12 +130,12 @@ def show_turn_message(screen, player_name):
     screen.blit(text_surf, text_rect)
     pygame.display.flip()  # Atualiza a tela
 
-    # Espera 2 segundos
-    pygame.time.wait(2000)
+    pygame.time.wait(1500)
 
 
 
 def start_game(screen):
+    sons.tocar_musica_jogo()
     field_image = pygame.image.load('assets/tabuleiro.svg')
     field_image = pygame.transform.scale(field_image, (1000, 800))
 

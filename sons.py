@@ -22,7 +22,7 @@ def parar_musica():
 
 # Função para tocar a música do jogo
 def tocar_musica_jogo():
-    pygame.mixer.music.load('assets/jogo_music.ogg')  # Carrega a música do jogo
+    pygame.mixer.music.load('assets/Legião Urbana.mp3')  # Carrega a música do jogo
     pygame.mixer.music.set_volume(0.9)
     pygame.mixer.music.play(-1)  # Toca indefinidamente
 
