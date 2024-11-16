@@ -132,6 +132,7 @@ def show_turn_message(screen, player_name):
 
 def draw_damage_animation(card):
     from main import screen
+    pygame.display.flip()
     pygame.draw.rect(screen, (255,0,0), card['pos'], width=0, border_radius=10)
     pygame.display.flip()
     pygame.time.wait(30)
