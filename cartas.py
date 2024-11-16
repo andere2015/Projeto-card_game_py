@@ -1,5 +1,6 @@
 import copy
 import sons, random,time,pygame
+
 class Card:
     def __init__(self, id , nome, vida, ataque, img, descricao,tipo,area):
         self.id = id
@@ -18,6 +19,9 @@ class Card:
         self.alvo = []
     def take_damage(self,card, damage):
         if damage>0:
+            from game import draw_damage_animation
+            draw_damage_animation(card)
+        
             self.vida-=damage
         if card['card'].vida <=0:
             sons.tocar_musica_morte()

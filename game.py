@@ -71,6 +71,7 @@ def draw_player_life(screen, player1, player2):
     screen.blit(circuloVida, (820, 684))
 
 
+
 def show_end_screen(screen, winner_name):
     sons.tocar_musica_vitoria()
   # Tela de finalização com mensagem do vencedor
@@ -124,15 +125,29 @@ def show_turn_message(screen, player_name):
     text = f"É a vez de {player_name} escolher!"
     text_surf = font.render(text, True, BLACK)
     text_rect = text_surf.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
-
-    
     screen.fill(WHITE)
     screen.blit(text_surf, text_rect)
     pygame.display.flip()  # Atualiza a tela
-
     pygame.time.wait(1500)
 
+def draw_damage_animation(card):
+    from main import screen
+    pygame.draw.rect(screen, (255,0,0), card['pos'], width=0, border_radius=10)
+    pygame.display.flip()
+    pygame.time.wait(30)
+    
 
+def show_atributes(screen,card):
+    font = pygame.font.SysFont(None, 25)
+
+    text_life = font.render(f"{card['card'].vida}", True, BLACK)
+    text_attack = font.render(f"{card['card'].ataque}", True, BLACK)
+    
+    attack_pos = (card['pos'][0]+15,card['pos'][1]+card['pos'][3]-30)
+    life_pos = (card['pos'][0]+card['pos'][2]-15,card['pos'][1]+card['pos'][3]-30)
+    
+    screen.blit(text_life, life_pos)
+    screen.blit(text_attack, attack_pos)
 
 def start_game(screen):
     sons.tocar_musica_jogo()
@@ -153,10 +168,10 @@ def start_game(screen):
     random.shuffle(player1.deck)
     random.shuffle(player2.deck)
 
-    for i in range(0,5):
+    for i in range(0,3):
         player1.hand.append(player1.deck.pop(0))
 
-    for i in range(0,5):
+    for i in range(0,3):
         player2.hand.append(player2.deck.pop(0))
 
     current_player = player1
@@ -190,12 +205,18 @@ def start_game(screen):
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
         draw_player_life(screen, player1, player2)
+        
         for row_key in grid:
             for position in grid[row_key]:  
                 if position['occupied']:
                     card_image = pygame.image.load(position['card'].img)
                     card_image = pygame.transform.scale(card_image, (position['pos'][2], position['pos'][3]))
                     screen.blit(card_image, (position['pos'][0], position['pos'][1]))
+
+        for row_key, row_positions in grid.items():
+            for position in row_positions:
+                if position['occupied']:
+                    show_atributes(screen,position)
 
         for i, card in enumerate(current_player.hand):
             x, y, width, height = 230 + i * 95, 656, 81, 117
@@ -260,17 +281,21 @@ def start_game(screen):
 
                     for i in range(0,3):
                         if current_back_row[i]['card'] is not None:
+                        
                             current_back_row[i]['card'].habilidade(current_back_row,current_front_row,opponent_back_row,opponent_front_row, current_player,opponent)
                             if current_back_row[i]['card'].tipo == 'equipamento' or current_back_row[i]['card'].tipo == 'feitiço':
                                 current_back_row[i]['card'].take_damage(current_back_row[i],1)
 
+
                         if current_front_row[i]['card'] is not None:
+                  
                             current_front_row[i]['card'].habilidade(current_front_row,current_back_row,opponent_back_row,opponent_front_row, current_player,opponent)
                             if current_front_row[i]['card'].tipo == 'equipamento' or current_front_row[i]['card'].tipo == 'feitiço':
                                 current_front_row[i]['card'].take_damage(current_front_row[i],1)
                                 
                     for i in range(0,3):
                         if opponent_back_row[i]['card'] is not None:
+       
                             opponent_back_row[i]['card'].habilidade(opponent_back_row,opponent_front_row,current_back_row,current_front_row,opponent, current_player)
 
                             if opponent_back_row[i]['card'].tipo == 'equipamento' or opponent_back_row[i]['card'].tipo == 'feitiço':
@@ -278,6 +303,7 @@ def start_game(screen):
 
 
                         if opponent_front_row[i]['card'] is not None:
+                 
                             opponent_front_row[i]['card'].habilidade(opponent_front_row,opponent_back_row,current_back_row,current_front_row,opponent, current_player)
 
                             if opponent_front_row[i]['card'].tipo == 'equipamento' or opponent_front_row[i]['card'].tipo == 'feitiço':
@@ -289,11 +315,13 @@ def start_game(screen):
                         if front_card['occupied']:
                             if opponent_front_row[i]['occupied'] and opponent_front_row[i]['card'] is not None:
                                 opponent_front_row[i]['card'].take_damage(opponent_front_row[i],front_card['card'].ataque)
-                                
+   
+
                           
                             elif opponent_back_row[i]['occupied'] and opponent_back_row[i]['card'] is not None:
                                 opponent_back_row[i]['card'].take_damage(opponent_back_row[i],front_card['card'].ataque)
-                       
+
+
                                 
                             else:
                                 opponent.take_damage(front_card['card'].ataque)

@@ -4,10 +4,11 @@ from menu import show_menu
 from game import start_game
 import sons
 
+screen = pygame.display.set_mode((1000, 800))
 # Função principal
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((1000, 800))
+    
     pygame.display.set_caption("Cartas Massa")
     menu = True
     playing = False
