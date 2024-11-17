@@ -21,7 +21,6 @@ class Card:
         if damage>0:
             from game import draw_damage_animation
             draw_damage_animation(card)
-        
             self.vida-=damage
         if card['card'].vida <=0:
             sons.tocar_musica_morte()

@@ -132,18 +132,15 @@ def show_turn_message(screen, player_name):
 
 def draw_damage_animation(card):
     from main import screen
-    pygame.display.flip()
+
     pygame.draw.rect(screen, (255,0,0), card['pos'], width=0, border_radius=10)
-    pygame.display.flip()
     pygame.time.wait(30)
     
 
 def show_atributes(screen,card):
     font = pygame.font.SysFont(None, 20)
-
     text_life = font.render(f"{card['card'].vida}", True, BLACK)
     text_attack = font.render(f"{card['card'].ataque}", True, BLACK)
-    
     attack_pos = (card['pos'][0]+20,card['pos'][1]+card['pos'][3]-25)
     life_pos = (card['pos'][0]+card['pos'][2]-20,card['pos'][1]+card['pos'][3]-25)
     
