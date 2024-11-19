@@ -4,6 +4,8 @@ import copy
 from constants import WHITE, BLACK, GREEN
 from cartas import cartas_existentes
 
+
+
 # Configurações iniciais do Pygame
 pygame.init()
 
@@ -70,11 +72,9 @@ def draw_modal(screen, card):
     draw_text_wrapped(card.nome, font, BLACK, modal_surface, 10, 260, 325)
     draw_text_wrapped(f"Vida: {card.vida} | Ataque: {card.ataque}", font, BLACK, modal_surface, 10, 300, 325)
     draw_text_wrapped(card.descricao, font, BLACK, modal_surface, 10, 340, 325)
-    
-    # Posição do modal na tela principal
+
     screen.blit(modal_surface, (640, 100))
-    
-# Função para construir o deck com rolagem
+
 def deck_builder(screen, player):
     
     font = pygame.font.SysFont(None, 30)
@@ -83,11 +83,10 @@ def deck_builder(screen, player):
     modal_card = None  # Variável para armazenar a carta que será exibida no modal
     scroll_offset = 10  # Offset para controlar a rolagem
 
-    while sum(selected_cards.values()) < 3:
+    while sum(selected_cards.values()) < 20:
         screen.fill(WHITE)
         draw_text_wrapped(f'{player.name}, escolha suas cartas ({sum(selected_cards.values())}/20)', font, BLACK, screen, 640, 50, 500)
 
-        # Desenha as cartas com o offset de rolagem
         draw_card_options(screen, available_cards, selected_cards, scroll_offset)
 
         for event in pygame.event.get():
@@ -98,13 +97,11 @@ def deck_builder(screen, player):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
 
-                # Controle do scroll
                 if event.button == 4:  # Rolagem para cima
                     scroll_offset = min(scroll_offset + 20, 0)  # Aumenta o valor para rolagem mais rápida
                 elif event.button == 5:  # Rolagem para baixo
                     scroll_offset -= 40  # Aumenta o valor para rolagem mais rápida
 
-                # Clique com o botão direito (abre o modal)
                 if event.button == 3:  # Botão direito do mouse
                     for i, card in enumerate(available_cards):
                         x = 50 + (i % 5) * 120
@@ -113,7 +110,6 @@ def deck_builder(screen, player):
                             modal_card = card  # Armazena a carta que será exibida no modal
                             break
 
-                # Clique com o botão esquerdo (seleciona a carta)
                 elif event.button == 1:  
                     for i, card in enumerate(available_cards):
                         x = 50 + (i % 5) * 120
@@ -126,10 +122,9 @@ def deck_builder(screen, player):
                                 selected_cards[card] = 0
                             if selected_cards[card] == 0:
                                 del selected_cards[card]
-                            modal_card = None  # Fecha o modal ao selecionar
+                            modal_card = None  
                             break
 
-        # Se houver uma carta selecionada para o modal, desenha o modal
         if modal_card:
             draw_modal(screen, modal_card)
 

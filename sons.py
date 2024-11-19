@@ -10,6 +10,8 @@ pygame.mixer.init()
 pygame.init()
 
 
+
+
 # Função para tocar a música do menu
 def tocar_musica_menu():
     pygame.mixer.music.load('assets/videoplayback.mp3')  # Carrega a música do menu

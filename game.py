@@ -9,6 +9,8 @@ import sons
 import time
 
 
+
+# Exemplo de uso
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect(center=(x, y))
@@ -45,13 +47,13 @@ def draw_player_life(screen, player1, player2):
     bar_width, bar_height = 60, 60  # Tamanho da barra de vida
 
 
-    player1_life_ratio = player1.life / 20  # Proporção da vida atual sobre o máximo
+    player1_life_ratio = player1.life / 40  # Proporção da vida atual sobre o máximo
     player1_life_width = int(bar_width * player1_life_ratio)  # Largura proporcional ao valor de vida atual
     pygame.draw.rect(screen, empty_life_color, (110,701, bar_width, bar_height))  # Barra vazia
     pygame.draw.rect(screen, full_life_color, (110,701, player1_life_width, bar_height))  # Vida atual
 
     # Desenhar barra de vida para o jogador 2
-    player2_life_ratio = player2.life / 20
+    player2_life_ratio = player2.life / 40
     player2_life_width = int(bar_width * player2_life_ratio)
     pygame.draw.rect(screen, empty_life_color, (830,694, bar_width, bar_height))  # Barra vazia
     pygame.draw.rect(screen, full_life_color, (830,694, player2_life_width, bar_height))  # Vida atual
@@ -166,10 +168,10 @@ def start_game(screen):
     random.shuffle(player1.deck)
     random.shuffle(player2.deck)
 
-    for i in range(0,3):
+    for i in range(0,5):
         player1.hand.append(player1.deck.pop(0))
 
-    for i in range(0,3):
+    for i in range(0,5):
         player2.hand.append(player2.deck.pop(0))
 
     current_player = player1
@@ -334,7 +336,7 @@ def start_game(screen):
                         player1.hand.append(player1.deck.pop(0))
                     if(len(player2.hand)<6 and len(player2.deck) > 0 and ctrlPass%2 != 0 and ctrlPass !=1):
                         player2.hand.append(player2.deck.pop(0))
- 
+
 
                     if turn_counter == 1:  
                         if current_player == player1:
@@ -343,6 +345,12 @@ def start_game(screen):
                             move_back_to_front(grid, player1.name)  
 
                     current_player = player2 if current_player == player1 else player1
+                    font = pygame.font.SysFont(None, 30)
+
+                    current_player_name = font.render(f"{current_player.name}", True, BLACK)
+          
+                    screen.blit(current_player_name, (120, 100))
+
                     turn_counter = 0 
 
         if dragging and selected_card:

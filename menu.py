@@ -3,6 +3,8 @@ import sys
 from constants import WHITE, BLACK
 import sons 
 
+
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect(center=(x, y))
@@ -40,9 +42,8 @@ def show_menu(screen):
                     return False, True  # Fechar o menu e iniciar o jogo
                 if 453 <= mx <= 548 and 395 <= my <= 433:
                     pygame.quit()
-                    sys.exit()  # Sair do jogo
+                    sys.exit() 
 
-        # Atualizar a tela a cada quadro
         pygame.display.update()
 
     return True, False
