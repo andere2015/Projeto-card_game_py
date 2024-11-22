@@ -83,7 +83,7 @@ def deck_builder(screen, player):
     modal_card = None  # Variável para armazenar a carta que será exibida no modal
     scroll_offset = 10  # Offset para controlar a rolagem
 
-    while sum(selected_cards.values()) < 20:
+    while sum(selected_cards.values()) < 3:
         screen.fill(WHITE)
         draw_text_wrapped(f'{player.name}, escolha suas cartas ({sum(selected_cards.values())}/20)', font, BLACK, screen, 640, 50, 500)
 

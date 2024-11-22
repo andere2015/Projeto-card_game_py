@@ -8,6 +8,8 @@ class Player:
         self.deck = []
     
     def take_damage(self,damage):
+        if damage<0:
+            return
         self.life-=damage
         print(f"{self.name} tomou {damage} de dano")
 

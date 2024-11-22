@@ -18,6 +18,7 @@ class Card:
         self.effect=False
         self.alvo = []
     def take_damage(self,card, damage):
+
         if damage>0:
             from game import draw_damage_animation
             draw_damage_animation(card)
@@ -69,6 +70,21 @@ class Arp(Card):
 class ArvoreB(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(3,'Arvore B', vida, ataque, 'assets/arvoreb.svg', descricao, 'tropa','algoritmos')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if self.effect is False:
+            ist=0
+            for i in range(0,3):
+                if atual_row[i]['card']==self:
+                    ist = i
+            if ist-1 >=0 and atual_row[ist-1]['occupied'] is False:
+                atual_row[ist-1]['card'] = Nob()
+                atual_row[ist-1]['occupied'] = True 
+                
+            
+            if ist+1 <=2 and atual_row[ist+1]['occupied'] is False:
+                atual_row[ist+1]['card'] = Nob()
+                atual_row[ist+1]['occupied'] = True 
+            self.effect=True
 
 class ArvoreRB(Card):
     def __init__(self, vida, ataque, descricao):
@@ -107,7 +123,22 @@ class Bombe(Card):
 
 class Break(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(6,'Break', vida, ataque, 'assets/break.svg', descricao, 'feitiço','programação')
+        super().__init__(6,'Break', 1, 0, 'assets/break.svg', descricao, 'feitiço','programação')
+        self.turno
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            other_row[ist]['card'].take_damage(other_row[ist],other_row[ist]['card'].vida)
+
+        elif front_inimiga[ist]['occupied']:
+            front_inimiga[ist]['card'].take_damage(front_inimiga[ist],front_inimiga[ist]['card'].vida)
+            
+        elif back_inimigo[ist]['occupied']:
+            back_inimigo[ist]['card'].take_damage(back_inimigo[ist],back_inimigo[ist]['card'].vida)
+
 
 class Bug(Card):
     def __init__(self, vida, ataque, descricao):
@@ -127,11 +158,15 @@ class Bug(Card):
             if len(self.alvo) <=3:
                 for card in self.alvo:
                     card.ataque -= 2
+                    if card.ataque<0:
+                        card.ataque=1
                     print(f"A carta {card.nome} teve o ataque reduzido pelo bug")
             elif len(self.alvo)>3:
                 self.alvo = random.sample(self.alvo,3)
                 for card in self.alvo:
                     card.ataque -=2
+                    if card.ataque<0:
+                        card.ataque=1
                     print(f"A carta {card.nome} teve o ataque reduzido pelo bug")
             self.effect=True
 
@@ -194,7 +229,17 @@ class Constante(Card):
 
 class Continue(Card):
     def __init__(self, vida, ataque, descricao):
-        super().__init__(11,'Continue', 1, 0, 'assets/continue.svg', descricao, 'feitiço','programação')
+        super().__init__(11,'Continue', vida, ataque, 'assets/continue.svg', descricao, 'equipamento','programação')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            if front_inimiga[ist]['occupied'] and back_inimigo[ist]['occupied']:
+                back_inimigo[ist]['card'].take_damage(back_inimigo[ist],other_row[ist]['card'].ataque)
+            else:
+                opponent.take_damage(other_row[ist]['card'].ataque)
 
 class DdosAttack(Card):
     def __init__(self, vida, ataque, descricao):
@@ -220,6 +265,19 @@ class DdosAttack(Card):
 class Derivada(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(13,'Derivada', 1, 0, 'assets/derivada.svg', descricao, 'feitiço','cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            other_row[ist]['card'].ataque //= 2
+
+        elif front_inimiga[ist]['occupied']:
+            front_inimiga[ist]['card'].ataque //= 2 
+
+        elif back_inimigo[ist]['occupied']:
+            back_inimigo[ist]['card'].ataque //= 2 
 
 class Dijkstra(Card):
     def __init__(self, vida, ataque, descricao):
@@ -275,10 +333,78 @@ class FlipFlop(Card):
 class Getway(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(20,'Getway', 1, 0, 'assets/getway.svg', descricao, 'feitiço', 'redes')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            other_row[ist]['card'].ataque = 0
+            if other_row[0]['occupied'] and ist != 0:
+                other_row[ist]['card'].ataque += other_row[0]['card'].ataque
+            if other_row[1]['occupied'] and ist != 1:
+                other_row[ist]['card'].ataque += other_row[1]['card'].ataque
+            if other_row[2]['occupied'] and ist != 2:
+                other_row[ist]['card'].ataque += other_row[2]['card'].ataque
+
+        elif front_inimiga[ist]['occupied']:
+            front_inimiga[ist]['card'].ataque = 0
+            if front_inimiga[0]['occupied'] and ist != 0:
+                front_inimiga[ist]['card'].ataque += front_inimiga[0]['card'].ataque
+            if front_inimiga[1]['occupied'] and ist != 1:
+                front_inimiga[ist]['card'].ataque += front_inimiga[1]['card'].ataque
+            if front_inimiga[2]['occupied'] and ist != 2:
+                front_inimiga[ist]['card'].ataque += front_inimiga[2]['card'].ataque
+
+        elif back_inimigo[ist]['occupied']:
+            back_inimigo[ist]['card'].ataque = 0
+            if back_inimigo[0]['occupied'] and ist != 0:
+                back_inimigo[ist]['card'].ataque += back_inimigo[0]['card'].ataque
+            if back_inimigo[1]['occupied'] and ist != 1:
+                back_inimigo[ist]['card'].ataque += back_inimigo[1]['card'].ataque
+            if back_inimigo[2]['occupied'] and ist != 2:
+                back_inimigo[ist]['card'].ataque += back_inimigo[2]['card'].ataque
+
+
 
 class GrafoPonderado(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(21,'Grafo Ponderado', 1, 0, 'assets/ponderar.svg', descricao, 'feitiço', 'algoritmos')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        menorInimigo = 100
+        menorAliado = 100
+        for i in range(0,3):
+            if front_inimiga[i]['occupied']:
+                if front_inimiga[i]['card'].tipo == 'tropa' and front_inimiga[i]['card'].ataque<menorInimigo:
+                    menorInimigo=front_inimiga[i]['card'].ataque
+            if back_inimigo[i]['occupied']:
+                if back_inimigo[i]['card'].tipo == 'tropa' and back_inimigo[i]['card'].ataque<menorInimigo:
+                    menorInimigo=back_inimigo[i]['card'].ataque
+
+        for i in range(0,3):
+            if other_row[i]['occupied']:
+                if other_row[i]['card'].tipo == 'tropa' and other_row[i]['card'].ataque<menorAliado:
+                    menorAliado=other_row[i]['card'].ataque
+            if atual_row[i]['occupied']:
+                if atual_row[i]['card'].tipo == 'tropa' and atual_row[i]['card'].ataque<menorAliado:
+                    menorAliado=atual_row[i]['card'].ataque
+
+        for i in range(0,3):
+            if front_inimiga[i]['occupied']:
+                if front_inimiga[i]['card'].tipo == 'tropa' and menorInimigo != 100:
+                    front_inimiga[i]['card'].ataque=menorInimigo
+            if back_inimigo[i]['occupied']:
+                if back_inimigo[i]['card'].tipo == 'tropa' and menorInimigo != 100:
+                    back_inimigo[i]['card'].ataque =menorInimigo
+
+        for i in range(0,3):
+            if other_row[i]['occupied']:
+                if other_row[i]['card'].tipo == 'tropa' and menorAliado != 100:
+                    other_row[i]['card'].ataque = menorAliado
+            if atual_row[i]['occupied']:
+                if atual_row[i]['card'].tipo == 'tropa' and menorAliado != 100:
+                    atual_row[i]['card'].ataque = menorAliado
+
 
 class GrafoFonte(Card):
     def __init__(self, vida, ataque, descricao):
@@ -314,6 +440,19 @@ class IntegracaoPartes(Card):
 class Integral(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(27,'Integral', vida, ataque, 'assets/integral.svg', descricao, 'equipamento', 'cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            other_row[ist]['card'].ataque *= 2
+
+        elif front_inimiga[ist]['occupied']:
+            front_inimiga[ist]['card'].ataque *= 2 
+
+        elif back_inimigo[ist]['occupied']:
+            back_inimigo[ist]['card'].ataque *= 2 
 
 class Karnaugh(Card):
     def __init__(self, vida, ataque, descricao):
@@ -322,6 +461,9 @@ class Karnaugh(Card):
 class Multiplexador(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(29,'Multiplexador', 1, 0, 'assets/multplex.svg', descricao, 'feitiço', 'circuitos')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if len(player.deck) > 0:
+            player.hand.append(player.deck.pop(0))
 
 class Nabla(Card):
     def __init__(self, vida, ataque, descricao):
@@ -379,9 +521,35 @@ class Registrador(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(35,'Registrador', vida, ataque, 'assets/register.svg', descricao, 'tropa', 'circuitos')
 
+
 class RegraCadeia(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(36,'Regra da cadeia', vida, ataque, 'assets/cadeia.svg', descricao, 'tropa', 'cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if self.effect is False:
+            ist=0
+            
+            for i in range(0,3):
+                if atual_row[i]['card']==self:
+                    ist = i
+
+            if other_row[ist]['occupied']:
+                self.alvo.append(other_row[ist]['card'])
+                other_row[ist]['occupied']=False
+                other_row[ist]['card']=None
+            
+            elif front_inimiga[ist]['occupied']:
+                self.alvo.append(front_inimiga[ist]['card'])
+                front_inimiga[ist]['occupied']=False
+                front_inimiga[ist]['card']=None
+
+            elif back_inimigo[ist]['occupied']:
+                self.alvo.append(back_inimigo[ist]['card'])
+                back_inimigo[ist]['occupied']=False
+                back_inimigo[ist]['card']=None
+
+            self.effect = True
+
 
 class Repetidor(Card):
     def __init__(self, vida, ataque, descricao):
@@ -462,6 +630,24 @@ class Sniffer(Card):
 class Somatorio(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(42,'Somatório', 1, 0, 'assets/shomatorio.svg', descricao, 'feitiço', 'cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+        if other_row[ist]['occupied']:
+            if other_row[0]['occupied'] and ist != 0:
+                other_row[ist]['card'].ataque += other_row[0]['card'].ataque
+                other_row[0]['card'].take_damage(other_row[0], other_row[0]['card'].vida)
+
+            if other_row[1]['occupied'] and ist != 1:
+                other_row[ist]['card'].ataque += other_row[1]['card'].ataque
+                other_row[1]['card'].take_damage(other_row[1], other_row[1]['card'].vida)
+
+            if other_row[2]['occupied'] and ist != 2:
+                other_row[ist]['card'].ataque += other_row[2]['card'].ataque
+                other_row[2]['card'].take_damage(other_row[2], other_row[2]['card'].vida)
+
 
 class Struct(Card):
     def __init__(self, vida, ataque, descricao):
@@ -470,6 +656,18 @@ class Struct(Card):
 class SubstituicaoTrigonometrica(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(44,'Subs Trigonométrica', vida, ataque, 'assets/subtrig.svg', descricao, 'tropa', 'cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        if self.effect is False:
+
+            ist=0
+            for i in range(0,3):
+                if atual_row[i]['card']==self:
+                    ist = i
+            if other_row[ist]['occupied']:
+                auxCard = other_row[ist]['card']
+                other_row[ist]['card'] = atual_row[ist]['card']
+                atual_row[ist]['card'] = auxCard
+            self.effect= True
 
 class Switch(Card):
     def __init__(self, vida, ataque, descricao):
@@ -478,7 +676,7 @@ class Switch(Card):
 class Ttl(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(46,'TTL', 1, 0, 'assets/ttl.svg', descricao, 'feitiço', 'redes')
-    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga):
+    def habilidade(self,atual_row,other_row,back_inimigo,front_inimiga,player, opponent):
         ist=0
         
         for i in range(0,3):
@@ -488,6 +686,7 @@ class Ttl(Card):
         if other_row[ist]['occupied'] and other_row[ist]['card'].nome!='Constante':
             other_row[ist]['card'].tipo = 'equipamento'
             print(f"a vida da carta {other_row[ist]['card'].nome} agora é ttl")
+
         elif front_inimiga[ist]['occupied'] and front_inimiga[ist]['card'].nome!='Constante':
             front_inimiga[ist]['card'].tipo = 'equipamento'
             print(f"a vida da carta {front_inimiga[ist]['card'].nome} agora é ttl")
@@ -503,10 +702,25 @@ class Xor(Card):
 class TeoremaConfronto(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(48,'Teorema do confronto', 1, 0, 'assets/confronto.svg', descricao, 'feitiço', 'cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        ist=0
+        for i in range(0,3):
+            if atual_row[i]['card']==self:
+                ist = i
+
+        if other_row[ist]['occupied']:
+            if front_inimiga[ist]['occupied']:
+                front_inimiga[ist]['card'].take_damage(front_inimiga[ist],other_row[ist]['card'].ataque)
+            elif back_inimigo[ist]['occupied']:
+                back_inimigo[ist]['card'].take_damage(back_inimigo[ist],other_row[ist]['card'].ataque)
 
 class SwitchCode(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(48,'Código Switch', vida, ataque, 'assets/switchC.svg', descricao, 'equipamento', 'programação')
+
+class Nob(Card):
+    def __init__(self):
+        super().__init__(48,'Código Switch', 3, 1, 'assets/nob.svg', 'Atrapalhar', 'tropa', 'algoritmos')
 
 
 and_carta = And(50, 1, "Operação lógica que resulta em verdadeiro se ambas as entradas forem verdadeiras.Nenhuma habilidade especial.")

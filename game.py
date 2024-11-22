@@ -3,6 +3,7 @@ import pygame
 import sys
 import random
 from constants import WHITE, GREEN, BLACK, RED
+import constants
 from player import Player
 from deck_builder import deck_builder
 import sons
@@ -134,8 +135,10 @@ def show_turn_message(screen, player_name):
 
 def draw_damage_animation(card):
     from main import screen
-
-    pygame.draw.rect(screen, (255,0,0), card['pos'], width=0, border_radius=10)
+    if card['card'].tipo == 'feitiço':
+        pygame.draw.rect(screen, (0,0,255), card['pos'], width=0, border_radius=10)
+    else:
+        pygame.draw.rect(screen, (255,0,0), card['pos'], width=0, border_radius=10)
     pygame.time.wait(30)
     
 
@@ -143,12 +146,27 @@ def show_atributes(screen,card):
     font = pygame.font.SysFont(None, 20)
     text_life = font.render(f"{card['card'].vida}", True, BLACK)
     text_attack = font.render(f"{card['card'].ataque}", True, BLACK)
-    attack_pos = (card['pos'][0]+20,card['pos'][1]+card['pos'][3]-25)
-    life_pos = (card['pos'][0]+card['pos'][2]-20,card['pos'][1]+card['pos'][3]-25)
     
-    screen.blit(text_life, life_pos)
-    screen.blit(text_attack, attack_pos)
+    attack_pos = (card['pos'][0]+25,card['pos'][1]+card['pos'][3]-25)
+    life_pos = (card['pos'][0]+card['pos'][2]-20,card['pos'][1]+card['pos'][3]-25)
 
+    if card['card'].tipo == 'tropa':
+        screen.blit(pygame.image.load(constants.HEART),(life_pos[0]-15,life_pos[1]))
+        screen.blit(pygame.image.load(constants.SWORD),(attack_pos[0]-13,attack_pos[1]))
+        screen.blit(text_life, life_pos)
+        screen.blit(text_attack, attack_pos)
+
+    elif card['card'].tipo == 'equipamento':
+        xEq = card['pos'][0]+30
+        screen.blit(pygame.image.load(constants.CLOCK),(xEq ,life_pos[1]))
+        screen.blit(text_life, (life_pos[0]-15,life_pos[1]))
+        
+def show_player_name(screen, name):
+
+    font = pygame.font.Font(None, 36)  
+    text_surface = font.render(name, True, (0, 0, 0)) 
+    screen.blit(text_surface, (20, 250)) 
+    
 def start_game(screen):
     sons.tocar_musica_jogo()
     field_image = pygame.image.load('assets/tabuleiro.svg')
@@ -168,10 +186,10 @@ def start_game(screen):
     random.shuffle(player1.deck)
     random.shuffle(player2.deck)
 
-    for i in range(0,5):
+    for i in range(0,2):
         player1.hand.append(player1.deck.pop(0))
 
-    for i in range(0,5):
+    for i in range(0,2):
         player2.hand.append(player2.deck.pop(0))
 
     current_player = player1
@@ -200,8 +218,9 @@ def start_game(screen):
                                {'pos': [470, 60, 80, 114], 'occupied': False, 'card': None},
                                {'pos': [593, 60, 80, 114], 'occupied': False, 'card': None}],
     }
-
+    
     while True:
+        
         screen.fill(WHITE)
         screen.blit(field_image, (0, 0))
         draw_player_life(screen, player1, player2)
@@ -234,6 +253,8 @@ def start_game(screen):
             show_end_screen(screen, player1.name)
             return
         
+        show_player_name(screen,current_player.name)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -345,11 +366,8 @@ def start_game(screen):
                             move_back_to_front(grid, player1.name)  
 
                     current_player = player2 if current_player == player1 else player1
-                    font = pygame.font.SysFont(None, 30)
+                    
 
-                    current_player_name = font.render(f"{current_player.name}", True, BLACK)
-          
-                    screen.blit(current_player_name, (120, 100))
 
                     turn_counter = 0 
 
