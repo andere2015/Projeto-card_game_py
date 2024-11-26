@@ -186,10 +186,10 @@ def start_game(screen):
     random.shuffle(player1.deck)
     random.shuffle(player2.deck)
 
-    for i in range(0,2):
+    for i in range(0,6):
         player1.hand.append(player1.deck.pop(0))
 
-    for i in range(0,2):
+    for i in range(0,6):
         player2.hand.append(player2.deck.pop(0))
 
     current_player = player1

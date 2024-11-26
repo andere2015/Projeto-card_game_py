@@ -124,7 +124,6 @@ class Bombe(Card):
 class Break(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(6,'Break', 1, 0, 'assets/break.svg', descricao, 'feitiço','programação')
-        self.turno
     def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
         ist=0
         for i in range(0,3):
@@ -290,6 +289,14 @@ class DoWhile(Card):
 class EspacoVetorial(Card):
     def __init__(self, vida, ataque, descricao):
         super().__init__(16,'Espaco Vetorial', 1, 0, 'assets/vetorial.svg', descricao, 'feitiço','cálculo')
+    def habilidade(self, atual_row, other_row, back_inimigo, front_inimiga, player, opponent):
+        for i in range(0,3):
+            if atual_row[i]['occupied']:
+                if  atual_row[i]['card'].tipo == 'cálculo':
+                    atual_row[i]['card'].ataque +=1
+            if other_row[i]['occupied']:
+                if  other_row[i]['card'].tipo == 'cálculo':
+                    other_row[i]['card'].ataque +=1
 
 class Fila(Card):
     def __init__(self, vida, ataque, descricao):
